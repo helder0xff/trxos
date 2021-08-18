@@ -1,1 +1,1 @@
-This is a very lightweight OS. Very, very.
+This is a very lightweight OS. Very, very lightweight.
