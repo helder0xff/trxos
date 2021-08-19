@@ -1,7 +1,7 @@
 /**
  * @file	trxos_test.c
  * @author	helder
- * @date	2021-08-18
+ * @date	2021-08-19
  * @brief	??
  */
 
@@ -17,6 +17,11 @@
 /* static vars go here.	*/
 
 /* static function declarations go here.	*/
+
+int main( void ) {
+
+	return 0;
+}
 
 /* non static function implementation go here.	*/
 
