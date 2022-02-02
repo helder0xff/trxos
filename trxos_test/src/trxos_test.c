@@ -7,6 +7,8 @@
 
 /* Includes go here.	*/
 #include <trxos_test.h>
+#include <msp432p401r.h>
+#include <CortexM.h>
 
 /* typedefs go here.	*/
 
@@ -17,8 +19,13 @@
 /* static vars go here.	*/
 
 /* static function declarations go here.	*/
+static void isAlive(void);
 
 int main( void ) {
+
+    for(int i = 0; i < 10; i++) {
+        isAlive();
+    }
 
 	return 0;
 }
@@ -26,5 +33,20 @@ int main( void ) {
 /* non static function implementation go here.	*/
 
 /* static function implementation go here.	*/
+static void isAlive(void){
+    WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD; // stop watchdog timer
 
-//*** end of file ***//
+    // Initialze P1.0 as output
+    P1->DIR |= BIT0;
+    // Clear secondary functions
+    P1->SEL0 &= ~(BIT0);
+    P1->SEL1 &= ~(BIT0);
+
+    // Blink
+    P1->OUT = 1;
+    Clock_Delay1ms(10000);
+    P1->OUT = 0;
+    Clock_Delay1ms(10000);
+}
+
+/**** end of file ****/

@@ -1,5 +1,5 @@
 {
 	"name": "trxos_test",
-	"modules" : [ ],
+	"modules" : ["/mnt/workspace/TRX/mods/bootloader/", "/mnt/workspace/TRX/trxos/"],
 	"defines" : [ ]
 }
