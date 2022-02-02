@@ -2,7 +2,7 @@
  * @file	trxos.c
  * @author	helder
  * @date	2021-08-19
- * @brief	??
+ * @brief	Light RTOS.
  */
 
 /* Includes go here.	*/
