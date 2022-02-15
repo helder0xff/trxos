@@ -4,3 +4,4 @@ Makefile
 *.elf
 *.map
 *.project
+RTOS_edx
