@@ -7,6 +7,7 @@
 
 /* Includes go here.	*/
 #include <trxos_test.h>
+#include <trxos.h>
 #include <msp432p401r.h>
 #include <CortexM.h>
 
@@ -27,7 +28,9 @@ int main( void ) {
         isAlive();
     }
 
-	return 0;
+    TRXOS_test();
+	
+    return 0;
 }
 
 /* non static function implementation go here.	*/

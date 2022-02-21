@@ -8,6 +8,8 @@
 #ifndef TRXOS_H
 #define TRXOS_H
 
+void TRXOS_test(void);
+
 #endif /* TRXOS_H */
 
 //*** end of file ***//
