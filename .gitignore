@@ -5,3 +5,5 @@ Makefile
 *.map
 *.project
 RTOS_edx
+.cproject
+.settings/
