@@ -1,5 +1,5 @@
 {
 	"name": "trxos_test",
-	"modules" : ["/mnt/workspace/TRX/trxos/lib/bootloader/", "/mnt/workspace/TRX/trxos/"],
+	"modules" : ["/mnt/workspace/TRX/trxos/trxos_test/lib/bootloader/", "/mnt/workspace/TRX/trxos/"],
 	"defines" : [ ]
 }
