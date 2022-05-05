@@ -29,6 +29,11 @@ int main( void ) {
     }
 
     TRXOS_test();
+    TRXOS_init();
+
+    while(0 == 0) {
+    	;
+    }
 	
     return 0;
 }
