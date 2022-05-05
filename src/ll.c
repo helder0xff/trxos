@@ -25,7 +25,7 @@ void LL_Init(LL_list_t* list, LL_node_t* head) {
     assert(NULL != list);
     assert(NULL != head);
 
-    list->id_cnt        = 0;            // Node id cnt. Mainly used for node removing.
+    list->id_cnt        = 0;            /* Mainly used for node removing. */
     list->head          = head;
     list->current       = list->head;
     list->tail          = list->current;
