@@ -9,14 +9,29 @@
 #include <trxos.h>
 #include <ll.h>
 #include <mail.h>
+#include <systick.h>
+#include <stddef.h>
+#include <assert.h>
 
 /* typedefs go here.	*/
+typedef struct TCB TCB_T;
+struct TCB{
+    LL_node_t node;
+    uint32_t* SP;
+};
 
 /* Consts go here.	*/
 
 /* #defines go here.	*/
+#define _NUMBER_OF_THREADS   3
+#define _STACK_SIZE          100
+#define _FREQ_MS             1
 
 /* static vars go here.	*/
+LL_list_t g_main_thread_list = {NULL, NULL, NULL, 0, 0};
+TCB_T _tcbs[_NUMBER_OF_THREADS];
+uint32_t _stacks[_NUMBER_OF_THREADS][_STACK_SIZE];
+TCB_T *_runPt;
 
 /* static function declarations go here.	*/
 static void _Init_Stack(uint32_t *SP, void(*PC)(void));
