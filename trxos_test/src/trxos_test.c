@@ -18,9 +18,13 @@
 /* #defines go here.	*/
 
 /* static vars go here.	*/
+static uint32_t _cnt = 0;
 
 /* static function declarations go here.	*/
 static void isAlive(void);
+static void main_thread_0(void);
+static void main_thread_1(void);
+static void main_thread_2(void);
 
 int main( void ) {
 
@@ -28,7 +32,10 @@ int main( void ) {
         isAlive();
     }
 
-    TRXOS_test();
+    //TRXOS_test();
+    TRXOS_add_main_thread(&main_thread_0);
+    TRXOS_add_main_thread(&main_thread_1);
+    TRXOS_add_main_thread(&main_thread_2);
     TRXOS_init();
 
     while(0 == 0) {
@@ -57,4 +64,33 @@ static void isAlive(void){
     Clock_Delay1ms(10000);
 }
 
+uint32_t thread_0_cnt = 0;
+static void main_thread_0(void){
+    
+
+    for(;;){
+        thread_0_cnt++;
+        _cnt++;
+    }
+}
+
+uint32_t thread_1_cnt = 0;
+static void main_thread_1(void){
+    
+
+    for(;;){
+        thread_1_cnt++;
+        _cnt++;
+    }
+}
+
+uint32_t thread_2_cnt = 0;
+static void main_thread_2(void){
+    
+
+    for(;;){
+        thread_2_cnt++;
+        _cnt++;
+    }
+}
 /**** end of file ****/
