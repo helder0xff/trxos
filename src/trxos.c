@@ -92,6 +92,22 @@ void TRXOS_init(void) {
     SYSTICK_Init(_FREQ_MS);
     TRXOS_Start_OS();
 }
+void TRXOS_add_main_thread(void(*thread)(void)) {
+    assert(NULL != thread);
+
+    int32_t length = LL_GetLength(&g_main_thread_list);
+
+    _Init_Stack(&_stacks[length][0], thread);
+    _Init_TCB(&_tcbs[length], &_stacks[length][_STACK_SIZE - 16]);
+    if(0 == length){
+        LL_Init(&g_main_thread_list, (LL_node_t*)&_tcbs[0]);
+        _runPt = (TCB_T*)LL_GetCurrent(&g_main_thread_list);
+
+    }
+    else{
+        LL_Add(&g_main_thread_list, (LL_node_t*)&_tcbs[length]);
+    }
+}
 /* static function implementation go here.	*/
 static void _Init_Stack(uint32_t *SP, void(*PC)(void)){
     SP[_STACK_SIZE - 1] = 0x01000000;   /* PSW  */
