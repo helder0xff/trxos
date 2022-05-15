@@ -92,6 +92,11 @@ void TRXOS_init(void) {
     SYSTICK_Init(_FREQ_MS);
     TRXOS_Start_OS();
 }
+
+void TRXOS_Scheduler(void){
+    LL_Next(&g_main_thread_list);
+}
+
 void TRXOS_add_main_thread(void(*thread)(void)) {
     assert(NULL != thread);
 
