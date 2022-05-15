@@ -1,0 +1,2 @@
+#1 LL: initialize linked list with no head.
+#2 Standarize naming.
