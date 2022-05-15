@@ -22,6 +22,10 @@ TRXOS_Start_OS:
     add     SP, SP, #4
     CPSIE   I
     BX      LR
+    @pop     {R4-R11}                    @ Pop R4-R11.
+    @pop     {R0-R3}                     @ Pop R0-R3.
+    @pop     {R12}                       @ Pop R12.
+    add     SP, SP, #56                  @ Skip thread LR, SP->thread PC.
 
 SysTick_Handler:
     CPSID   I                       @ A comment
