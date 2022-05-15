@@ -19,6 +19,9 @@
 /* static vars go here.	*/
 
 /* static function declarations go here.	*/
+static void _Init_Stack(uint32_t *SP, void(*PC)(void));
+static void _Init_TCB(TCB_T *tcb_pt, uint32_t* SP);
+void TRXOS_Start_OS(void);
 
 /* non static function implementation go here.	*/
 void TRXOS_test(void) {
@@ -69,6 +72,32 @@ void TRXOS_test(void) {
     MAIL_Write(&mail_box, 202);
     MAIL_Read(&mail_box, &message);
 }
-/* static function implementation go here.	*/
 
+void TRXOS_init(void) {
+    SYSTICK_Init(_FREQ_MS);
+    TRXOS_Start_OS();
+}
+/* static function implementation go here.	*/
+static void _Init_Stack(uint32_t *SP, void(*PC)(void)){
+    SP[_STACK_SIZE - 1] = 0x01000000;   /* PSW  */
+    SP[_STACK_SIZE - 2] = (uint32_t)PC;           /* PC   */
+    /* SP[_STACK_SIZE - 3] -> R14    */
+    /* SP[_STACK_SIZE - 4] -> R12    */
+    /* SP[_STACK_SIZE - 5] -> R3     */
+    /* SP[_STACK_SIZE - 6] -> R2     */
+    /* SP[_STACK_SIZE - 7] -> R1     */
+    /* SP[_STACK_SIZE - 8] -> R0     */
+    /* SP[_STACK_SIZE - 9] -> R11    */
+    /* SP[_STACK_SIZE - 10] -> R10   */
+    /* SP[_STACK_SIZE - 11] -> R9    */
+    /* SP[_STACK_SIZE - 12] -> R8    */
+    /* SP[_STACK_SIZE - 13] -> R7    */
+    /* SP[_STACK_SIZE - 14] -> R6    */
+    /* SP[_STACK_SIZE - 15] -> R5    */
+    /* SP[_STACK_SIZE - 16] -> R4    */
+}
+
+static void _Init_TCB(TCB_T *tcb_pt, uint32_t* SP){
+    tcb_pt->SP = SP;
+}
 //*** end of file ***//
