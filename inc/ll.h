@@ -31,6 +31,8 @@ void LL_Next(LL_list_t* list);
 void LL_Add(LL_list_t* list, LL_node_t* node);
 void LL_InitNode(LL_node_t* node, int32_t data);
 LL_node_t* LL_Remove(LL_list_t* list, uint32_t node_id);
+int32_t LL_GetLength(LL_list_t* list);
+LL_node_t* LL_GetCurrent(LL_list_t* list);
 
 #endif /* TRXOS_H */
 

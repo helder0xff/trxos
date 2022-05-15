@@ -94,6 +94,14 @@ void LL_Next(LL_list_t* list) {
     return cursor;
  }
 
+ int32_t LL_GetLength(LL_list_t* list){
+    return list->length;
+ }
+
+ LL_node_t* LL_GetCurrent(LL_list_t* list){
+    return list->current;
+ }
+
 /* static function implementation go here.	*/
 
 //*** end of file ***//
