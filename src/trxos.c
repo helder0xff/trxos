@@ -16,26 +16,36 @@
 /* typedefs go here.	*/
 typedef struct TCB TCB_T;
 struct TCB{
-    LL_node_t node;
-    uint32_t* SP;
+    LL_node_t   node;
+    uint32_t*   SP;
+    uint8_t     priority;
+    uint32_t    reload_time;
+    uint32_t    current_time;
+    void(*thread)(void);
 };
 
 /* Consts go here.	*/
 
 /* #defines go here.	*/
-#define _NUMBER_OF_THREADS   3
+#define _NUMBER_OF_THREADS   10
 #define _STACK_SIZE          100
 #define _FREQ_MS             1
 
 /* static vars go here.	*/
-LL_list_t g_main_thread_list = {NULL, NULL, NULL, 0, 0};
+LL_list_t g_main_thread_list        = {NULL, NULL, NULL, 0, 0};
+LL_list_t g_periodic_thread_list    = {NULL, NULL, NULL, 0, 0};
 TCB_T _tcbs[_NUMBER_OF_THREADS];
 uint32_t _stacks[_NUMBER_OF_THREADS][_STACK_SIZE];
 TCB_T *_runPt;
 
 /* static function declarations go here.	*/
 static void _Init_Stack(uint32_t *SP, void(*PC)(void));
-static void _Init_TCB(TCB_T *tcb_pt, uint32_t* SP);
+static void _Init_TCB(  TCB_T *tcb_pt, 
+                        uint32_t* SP, 
+                        uint32_t period_ms, 
+                        uint8_t priority,
+                        void(*thread)(void));
+static void _run_periodic_threads(void);
 void TRXOS_Start_OS(void);
 
 /* non static function implementation go here.	*/
@@ -94,25 +104,68 @@ void TRXOS_init(void) {
 }
 
 void TRXOS_Scheduler(void){
+    _run_periodic_threads();
     LL_Next(&g_main_thread_list);
 }
 
-void TRXOS_add_main_thread(void(*thread)(void)) {
+static void _run_periodic_threads(void){
+    void(*thread)(void) = NULL;
+
+    for(int i = LL_GetLength(&g_periodic_thread_list); i > 0; i--){
+        TCB_T* current = (TCB_T*)LL_GetCurrent(&g_periodic_thread_list);
+        current->current_time--;
+        if(0 == current->current_time){
+            current->current_time = current->reload_time;
+            thread = current->thread;
+            thread();
+        }
+        LL_Next(&g_periodic_thread_list);
+    }
+}
+
+void TRXOS_add_main_thread(void(*thread)(void), uint8_t priority) {
     assert(NULL != thread);
 
-    int32_t length = LL_GetLength(&g_main_thread_list);
+    int32_t length =    LL_GetLength(&g_main_thread_list) +
+                        LL_GetLength(&g_periodic_thread_list);
 
     _Init_Stack(&_stacks[length][0], thread);
-    _Init_TCB(&_tcbs[length], &_stacks[length][_STACK_SIZE - 16]);
+    _Init_TCB(  &_tcbs[length], 
+                &_stacks[length][_STACK_SIZE - 16], 
+                0, 
+                priority,
+                NULL);
     if(0 == length){
         LL_Init(&g_main_thread_list, (LL_node_t*)&_tcbs[0]);
         _runPt = (TCB_T*)LL_GetCurrent(&g_main_thread_list);
-
     }
     else{
         LL_Add(&g_main_thread_list, (LL_node_t*)&_tcbs[length]);
     }
 }
+
+void TRXOS_add_periodic_thread( void(*thread)(void), 
+                                uint32_t period_ms, 
+                                uint8_t priority){
+    assert(NULL != thread);
+
+    int32_t length =    LL_GetLength(&g_main_thread_list) +
+                        LL_GetLength(&g_periodic_thread_list);
+
+    _Init_TCB(  &_tcbs[length], 
+                &_stacks[length][_STACK_SIZE - 16], 
+                period_ms,
+                priority,
+                thread);
+    if(0 == LL_GetLength(&g_periodic_thread_list)){
+        LL_Init(&g_periodic_thread_list, (LL_node_t*)&_tcbs[length]);
+        //_runPt = (TCB_T*)LL_GetCurrent(&g_periodic_thread_list);
+    }
+    else{
+        LL_Add(&g_periodic_thread_list, (LL_node_t*)&_tcbs[length]);
+    }
+}
+
 /* static function implementation go here.	*/
 static void _Init_Stack(uint32_t *SP, void(*PC)(void)){
     SP[_STACK_SIZE - 1] = 0x01000000;   /* PSW  */
@@ -133,7 +186,15 @@ static void _Init_Stack(uint32_t *SP, void(*PC)(void)){
     /* SP[_STACK_SIZE - 16] -> R4    */
 }
 
-static void _Init_TCB(TCB_T *tcb_pt, uint32_t* SP){
+static void _Init_TCB(  TCB_T *tcb_pt, 
+                        uint32_t* SP, 
+                        uint32_t period_ms, 
+                        uint8_t priority,
+                        void(*thread)(void)){
     tcb_pt->SP = SP;
+    tcb_pt->reload_time     = period_ms;
+    tcb_pt->current_time    = tcb_pt->reload_time;
+    tcb_pt->priority        = priority;
+    tcb_pt->thread          = thread;
 }
 //*** end of file ***//

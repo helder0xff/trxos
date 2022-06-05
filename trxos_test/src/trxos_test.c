@@ -18,13 +18,15 @@
 /* #defines go here.	*/
 
 /* static vars go here.	*/
-static uint32_t _cnt = 0;
 
 /* static function declarations go here.	*/
 static void isAlive(void);
 static void main_thread_0(void);
 static void main_thread_1(void);
 static void main_thread_2(void);
+static void periodic_thread_0(void);
+static void periodic_thread_1(void);
+static void periodic_thread_2(void);
 
 int main( void ) {
 
@@ -33,15 +35,18 @@ int main( void ) {
     }
 
     //TRXOS_test();
-    TRXOS_add_main_thread(&main_thread_0);
-    TRXOS_add_main_thread(&main_thread_1);
-    TRXOS_add_main_thread(&main_thread_2);
+    TRXOS_add_main_thread(&main_thread_0, 0);
+    TRXOS_add_periodic_thread(&periodic_thread_0, 1000, 0);
+    TRXOS_add_periodic_thread(&periodic_thread_1, 60000, 0);    
+    TRXOS_add_main_thread(&main_thread_1, 0);
+    TRXOS_add_main_thread(&main_thread_2, 0);
+    TRXOS_add_periodic_thread(&periodic_thread_2, 3600000, 0);
     TRXOS_init();
 
     while(0 == 0) {
     	;
     }
-	
+
     return 0;
 }
 
@@ -64,33 +69,51 @@ static void isAlive(void){
     Clock_Delay1ms(10000);
 }
 
-uint32_t thread_0_cnt = 0;
+uint32_t main_thread_0_cnt = 0;
 static void main_thread_0(void){
-    
-
     for(;;){
-        thread_0_cnt++;
-        _cnt++;
+        main_thread_0_cnt++;
     }
 }
 
-uint32_t thread_1_cnt = 0;
-static void main_thread_1(void){
-    
-
+uint32_t main_thread_1_cnt = 0;
+static void main_thread_1(void){    
     for(;;){
-        thread_1_cnt++;
-        _cnt++;
+        main_thread_1_cnt++;
     }
 }
 
-uint32_t thread_2_cnt = 0;
-static void main_thread_2(void){
-    
-
+uint32_t main_thread_2_cnt = 0;
+static void main_thread_2(void){    
     for(;;){
-        thread_2_cnt++;
-        _cnt++;
+        main_thread_2_cnt++;
     }
 }
+
+uint32_t periodic_thread_0_cnt = 0;
+static void periodic_thread_0(void){
+    periodic_thread_0_cnt++;
+    uint8_t led_status = P1->OUT;
+    P1->OUT = ~led_status;
+    if(periodic_thread_0_cnt >= 60){
+        periodic_thread_0_cnt = 0;
+    }
+}
+
+uint32_t periodic_thread_1_cnt = 0;
+static void periodic_thread_1(void){
+    periodic_thread_1_cnt++;
+    if(periodic_thread_1_cnt >= 60){
+        periodic_thread_1_cnt = 0;
+    }    
+}
+
+uint32_t periodic_thread_2_cnt = 0;
+static void periodic_thread_2(void){
+    periodic_thread_2_cnt++;
+    if(periodic_thread_2_cnt >= 24){
+        periodic_thread_2_cnt = 0;
+    }    
+}
+
 /**** end of file ****/
