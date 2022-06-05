@@ -15,7 +15,7 @@ extern LL_list_t g_main_thread_list;
 
 void SYSTICK_Init(uint32_t period_ms) {
 	STCTRL 		= 0; 									/* Disable. */
-	STRELOAD 	= ((SYS_FREQ * period_ms)/1000) + 1;	/* Set reload val. */
+	STRELOAD 	= ((SYS_FREQ * period_ms)/1000) - 1;	/* Set reload val. */	
 	STCURRENT 	= 0; 									/* Reset counter. */
 	SYSPRI3 	= (SYSPRI3 & 0x00FFFFFF) | 0xE0000000;	/* Priority = 7. */
 	STCTRL 		= 0b111; 								/* 	Src Clk + 
