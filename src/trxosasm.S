@@ -3,13 +3,13 @@
     .align 2
     .syntax unified
     .extern g_main_thread_list
-    .globl  TRXOS_Start_OS
-    .type   TRXOS_Start_OS,%function
+    .globl  TRXOS_start_OS
+    .type   TRXOS_start_OS,%function
     .globl  SysTick_Handler
     .type   SysTick_Handler,%function
     .globl  TRXOS_Scheduler
 
-TRXOS_Start_OS:
+TRXOS_start_OS:
     CPSID   I                           @ Disable interrupts.
     ldr     R0, =g_main_thread_list     @ R0 = &g_main_thread_list.
     ldr     R1, [R0]                    @ R1 = *g_main_thread_list.

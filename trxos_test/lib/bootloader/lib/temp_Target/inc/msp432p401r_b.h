@@ -1,4 +1,4 @@
-//*****************************************************************************
+/***************************************************************************
 //
 // Copyright (C) 2012 - 2015 Texas Instruments Incorporated - http://www.ti.com/
 //
@@ -52,7 +52,7 @@
 //
 // File creation date: 2015-01-20
 //
-//****************************************************************************
+/**************************************************************************
 
 #ifndef __MSP432P401R_H__
 #define __MSP432P401R_H__
@@ -63,9 +63,9 @@
 // Remap MSP430 intrinsics to ARM equivalents
 #include "msp_compatibility.h"
 
-//*****************************************************************************
+/***************************************************************************
 // CMSIS-compatible Interrupt Number Definition
-//*****************************************************************************
+/***************************************************************************
 #ifndef __CMSIS_CONFIG__
 #define __CMSIS_CONFIG__
 
@@ -125,9 +125,9 @@ typedef enum IRQn
   PORT6_IRQn                  = 40      /* 56 PORT6 Interrupt */
 } IRQn_Type;
 
-//*****************************************************************************
+/***************************************************************************
 // CMSIS-compatible configuration of the Cortex-M4 Processor and Core Peripherals
-//*****************************************************************************
+/***************************************************************************
 #define __MPU_PRESENT           1     // MPU present or not
 #define __NVIC_PRIO_BITS        3     // Number of Bits used for Prio Levels
 #define __FPU_PRESENT           1     // FPU present or not
@@ -144,9 +144,9 @@ typedef enum IRQn
 #include "core_cm4.h"
 #endif
 
-//*****************************************************************************
+/***************************************************************************
 // Definition of standard bits
-//*****************************************************************************
+/***************************************************************************
 #define BIT0                                               (0x0001u)
 #define BIT1                                               (0x0002u)
 #define BIT2                                               (0x0004u)
@@ -165,9 +165,9 @@ typedef enum IRQn
 #define BITF                                               (0x8000u)
 #define BIT(x)                                             (1 << (x))
 
-//*****************************************************************************
+/***************************************************************************
 // Definitions for 8/16/32-bit wide memory access
-//*****************************************************************************
+/***************************************************************************
 #define HWREG8(x)                                          (*((volatile uint8_t *)(x)))
 #define HWREG16(x)                                         (*((volatile uint16_t *)(x)))
 #define HWREG32(x)                                         (*((volatile uint32_t *)(x)))
@@ -177,18 +177,18 @@ typedef enum IRQn
 #define HWREG16_L(x)                                       (*((volatile uint16_t *)((uint16_t *)&x)))
 #define HWREG16_H(x)                                       (*((volatile uint16_t *)(((uint16_t *)&x)+1)))
 
-//*****************************************************************************
+/***************************************************************************
 // Definitions for 8/16/32-bit wide bit band access
-//*****************************************************************************
+/***************************************************************************
 #define HWREGBIT8(x, b)                                    (HWREG8(((uint32_t)(x) & 0xF0000000) | 0x02000000 | (((uint32_t)(x) & 0x000FFFFF) << 5) | ((b) << 2)))
 #define HWREGBIT16(x, b)                                   (HWREG16(((uint32_t)(x) & 0xF0000000) | 0x02000000 | (((uint32_t)(x) & 0x000FFFFF) << 5) | ((b) << 2)))
 #define HWREGBIT32(x, b)                                   (HWREG32(((uint32_t)(x) & 0xF0000000) | 0x02000000 | (((uint32_t)(x) & 0x000FFFFF) << 5) | ((b) << 2)))
 #define BITBAND_SRAM(x, b)                                 (*((volatile uint8_t *) (0x22000000 +  (((uint32_t)(uint32_t *)&x) - 0x20000000)*32 + b*4)))
 #define BITBAND_PERI(x, b)                                 (*((volatile uint8_t *) (0x42000000 +  (((uint32_t)(uint32_t *)&x) - 0x40000000)*32 + b*4)))
 
-//*****************************************************************************
+/***************************************************************************
 // Device memory map
-//*****************************************************************************
+/***************************************************************************
 #define __MAIN_MEMORY_START__                              (0x00000000)          /* Main Flash memory start address */
 #define __MAIN_MEMORY_END__                                (0x0003FFFF)          /* Main Flash memory end address */
 #define __BSL_MEMORY_START__                               (0x00202000)          /* BSL memory start address */
@@ -196,9 +196,9 @@ typedef enum IRQn
 #define __SRAM_START__                                     (0x20000000)          /* SRAM memory start address */
 #define __SRAM_END__                                       (0x2000FFFF)          /* SRAM memory end address */
 
-//*****************************************************************************
+/***************************************************************************
 // Peripheral memory map
-//*****************************************************************************
+/***************************************************************************
 #define __MCU_HAS_ADC14__                                                        /* Module is available */
 #define __MCU_HAS_AES256__                                                       /* Module is available */
 #define __MCU_HAS_CAPTIO0__                                                      /* Module is available */
@@ -339,13 +339,13 @@ typedef enum IRQn
 #define WDT_A                                              ((WDT_A_Type *) WDT_A_BASE)   
 
 
-//*****************************************************************************
+/***************************************************************************
 // MSP-format peripheral registers
-//*****************************************************************************
+/***************************************************************************
 
-//*****************************************************************************
+/***************************************************************************
 // ADC14 Registers
-//*****************************************************************************
+/***************************************************************************
 #define ADC14CTL0                                          (HWREG32(0x40012000)) /* Control 0 Register  */
 #define ADC14CTL1                                          (HWREG32(0x40012004)) /* Control 1 Register */
 #define ADC14LO0                                           (HWREG32(0x40012008)) /* Window Comparator Low Threshold 0 Register  */
@@ -504,9 +504,9 @@ typedef enum IRQn
 #define OFS_ADC14IV                                        (0x00000154)          /* Interrupt Vector Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // AES256 Registers
-//*****************************************************************************
+/***************************************************************************
 #define AESACTL0                                           (HWREG16(0x40003C00)) /* AES Accelerator Control Register 0 */
 #define AESACTL1                                           (HWREG16(0x40003C02)) /* AES Accelerator Control Register 1 */
 #define AESASTAT                                           (HWREG16(0x40003C04)) /* AES Accelerator Status Register */
@@ -527,9 +527,9 @@ typedef enum IRQn
 #define OFS_AESAXIN                                        (0x000e)              /* AES Accelerator XORed Data In Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // CAPTIO0 Registers
-//*****************************************************************************
+/***************************************************************************
 #define CAPTIO0CTL                                         (HWREG16(0x4000540E)) /* Capacitive Touch IO x Control Register */
 
 /* Register offsets from CAPTIO0_BASE address */
@@ -538,9 +538,9 @@ typedef enum IRQn
 #define CAPTIO0CTL_L                                       (HWREG8_L(CAPTIO0CTL))/* Capacitive Touch IO x Control Register */
 #define CAPTIO0CTL_H                                       (HWREG8_H(CAPTIO0CTL))/* Capacitive Touch IO x Control Register */
 
-//*****************************************************************************
+/***************************************************************************
 // CAPTIO1 Registers
-//*****************************************************************************
+/***************************************************************************
 #define CAPTIO1CTL                                         (HWREG16(0x4000580E)) /* Capacitive Touch IO x Control Register */
 
 /* Register offsets from CAPTIO1_BASE address */
@@ -549,9 +549,9 @@ typedef enum IRQn
 #define CAPTIO1CTL_L                                       (HWREG8_L(CAPTIO1CTL))/* Capacitive Touch IO x Control Register */
 #define CAPTIO1CTL_H                                       (HWREG8_H(CAPTIO1CTL))/* Capacitive Touch IO x Control Register */
 
-//*****************************************************************************
+/***************************************************************************
 // COMP_E0 Registers
-//*****************************************************************************
+/***************************************************************************
 #define CE0CTL0                                            (HWREG16(0x40003400)) /* Comparator Control Register 0 */
 #define CE0CTL1                                            (HWREG16(0x40003402)) /* Comparator Control Register 1 */
 #define CE0CTL2                                            (HWREG16(0x40003404)) /* Comparator Control Register 2 */
@@ -568,9 +568,9 @@ typedef enum IRQn
 #define OFS_CE0IV                                          (0x000e)              /* Comparator Interrupt Vector Word Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // COMP_E1 Registers
-//*****************************************************************************
+/***************************************************************************
 #define CE1CTL0                                            (HWREG16(0x40003800)) /* Comparator Control Register 0 */
 #define CE1CTL1                                            (HWREG16(0x40003802)) /* Comparator Control Register 1 */
 #define CE1CTL2                                            (HWREG16(0x40003804)) /* Comparator Control Register 2 */
@@ -587,9 +587,9 @@ typedef enum IRQn
 #define OFS_CE1IV                                          (0x000e)              /* Comparator Interrupt Vector Word Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // COREDEBUG Registers
-//*****************************************************************************
+/***************************************************************************
 #define COREDEBUG_DHCSR                                    (HWREG32(0xE000EDF0)) /* Debug Halting Control and Status Register */
 #define COREDEBUG_DCRSR                                    (HWREG32(0xE000EDF4)) /* Deubg Core Register Selector Register */
 #define COREDEBUG_DCRDR                                    (HWREG32(0xE000EDF8)) /* Debug Core Register Data Register */
@@ -602,9 +602,9 @@ typedef enum IRQn
 #define OFS_COREDEBUG_DEMCR                                (0x00000DFC)          /* Debug Exception and Monitor Control Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // CRC32 Registers
-//*****************************************************************************
+/***************************************************************************
 #define CRC32DI                                            (HWREG16(0x40004000)) /* Data Input for CRC32 Signature Computation */
 #define CRC32DIRB                                          (HWREG16(0x40004004)) /* Data In Reverse for CRC32 Computation */
 #define CRC32INIRES_LO                                     (HWREG16(0x40004008)) /* CRC32 Initialization and Result, lower 16 bits */
@@ -629,9 +629,9 @@ typedef enum IRQn
 #define OFS_CRC16RESR                                      (0x001e)              /* CRC16 Result Reverse */
 
 
-//*****************************************************************************
+/***************************************************************************
 // CS Registers
-//*****************************************************************************
+/***************************************************************************
 #define CSKEY                                              (HWREG32(0x40010400)) /* Key Register */
 #define CSCTL0                                             (HWREG32(0x40010404)) /* Control 0 Register */
 #define CSCTL1                                             (HWREG32(0x40010408)) /* Control 1 Register */
@@ -668,9 +668,9 @@ typedef enum IRQn
 #define OFS_CSDCOERCAL                                     (0x00000060)          /* DCO external resistor cailbration register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // DIO Registers
-//*****************************************************************************
+/***************************************************************************
 #define PAIN                                               (HWREG16(0x40004C00)) /* Port A Input */
 #define PAOUT                                              (HWREG16(0x40004C02)) /* Port A Output */
 #define PADIR                                              (HWREG16(0x40004C04)) /* Port A Direction */
@@ -1041,9 +1041,9 @@ typedef enum IRQn
 #define OFS_P10IFG                                         (0x009c)              /* Port 10 Interrupt Flag */
 
 
-//*****************************************************************************
+/***************************************************************************
 // DMA Registers
-//*****************************************************************************
+/***************************************************************************
 #define DMA_DEVICE_CFG                                     (HWREG32(0x4000E000)) /* Device Configuration Status */
 #define DMA_SW_CHTRIG                                      (HWREG32(0x4000E004)) /* Software Channel Trigger Register */
 #define DMA_CH0_SRCCFG                                     (HWREG32(0x4000E010)) /* Channel n Source Configuration Register */
@@ -1160,9 +1160,9 @@ typedef enum IRQn
 #define OFS_DMA_ERRCLR                                     (0x0000104c)          /* Bus Error Clear Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // DWT Registers
-//*****************************************************************************
+/***************************************************************************
 #define DWT_CTRL                                           (HWREG32(0xE0001000)) /* DWT Control Register */
 #define DWT_CYCCNT                                         (HWREG32(0xE0001004)) /* DWT Current PC Sampler Cycle Count Register */
 #define DWT_CPICNT                                         (HWREG32(0xE0001008)) /* DWT CPI Count Register */
@@ -1207,9 +1207,9 @@ typedef enum IRQn
 #define OFS_DWT_FUNCTION3                                  (0x00000058)          /* DWT Function Register 3 */
 
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_A0 Registers
-//*****************************************************************************
+/***************************************************************************
 #define UCA0CTLW0                                          (HWREG16(0x40001000)) /* eUSCI_Ax Control Word Register 0 */
 #define UCA0CTLW0_SPI                                      (HWREG16(0x40001000)) /*  */
 #define UCA0CTLW1                                          (HWREG16(0x40001002)) /* eUSCI_Ax Control Word Register 1 */
@@ -1260,9 +1260,9 @@ typedef enum IRQn
 #define UCA0IRTCTL                                         (HWREG8_L(UCA0IRCTL)) /* eUSCI_Ax IrDA Transmit Control */
 #define UCA0IRRCTL                                         (HWREG8_H(UCA0IRCTL)) /* eUSCI_Ax IrDA Receive Control */
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_A1 Registers
-//*****************************************************************************
+/***************************************************************************
 #define UCA1CTLW0                                          (HWREG16(0x40001400)) /* eUSCI_Ax Control Word Register 0 */
 #define UCA1CTLW0_SPI                                      (HWREG16(0x40001400)) /*  */
 #define UCA1CTLW1                                          (HWREG16(0x40001402)) /* eUSCI_Ax Control Word Register 1 */
@@ -1313,9 +1313,9 @@ typedef enum IRQn
 #define UCA1IRTCTL                                         (HWREG8_L(UCA1IRCTL)) /* eUSCI_Ax IrDA Transmit Control */
 #define UCA1IRRCTL                                         (HWREG8_H(UCA1IRCTL)) /* eUSCI_Ax IrDA Receive Control */
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_A2 Registers
-//*****************************************************************************
+/***************************************************************************
 #define UCA2CTLW0                                          (HWREG16(0x40001800)) /* eUSCI_Ax Control Word Register 0 */
 #define UCA2CTLW0_SPI                                      (HWREG16(0x40001800)) /*  */
 #define UCA2CTLW1                                          (HWREG16(0x40001802)) /* eUSCI_Ax Control Word Register 1 */
@@ -1366,9 +1366,9 @@ typedef enum IRQn
 #define UCA2IRTCTL                                         (HWREG8_L(UCA2IRCTL)) /* eUSCI_Ax IrDA Transmit Control */
 #define UCA2IRRCTL                                         (HWREG8_H(UCA2IRCTL)) /* eUSCI_Ax IrDA Receive Control */
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_A3 Registers
-//*****************************************************************************
+/***************************************************************************
 #define UCA3CTLW0                                          (HWREG16(0x40001C00)) /* eUSCI_Ax Control Word Register 0 */
 #define UCA3CTLW0_SPI                                      (HWREG16(0x40001C00)) /*  */
 #define UCA3CTLW1                                          (HWREG16(0x40001C02)) /* eUSCI_Ax Control Word Register 1 */
@@ -1419,9 +1419,9 @@ typedef enum IRQn
 #define UCA3IRTCTL                                         (HWREG8_L(UCA3IRCTL)) /* eUSCI_Ax IrDA Transmit Control */
 #define UCA3IRRCTL                                         (HWREG8_H(UCA3IRCTL)) /* eUSCI_Ax IrDA Receive Control */
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_B0 Registers
-//*****************************************************************************
+/***************************************************************************
 #define UCB0CTLW0                                          (HWREG16(0x40002000)) /* eUSCI_Bx Control Word Register 0 */
 #define UCB0CTLW0_SPI                                      (HWREG16(0x40002000)) /*  */
 #define UCB0CTLW1                                          (HWREG16(0x40002002)) /* eUSCI_Bx Control Word Register 1 */
@@ -1482,9 +1482,9 @@ typedef enum IRQn
 #define UCB0STAT                                           (HWREG8_L(UCB0STATW)) /* eUSCI_Bx Status */
 #define UCB0BCNT                                           (HWREG8_H(UCB0STATW)) /* eUSCI_Bx Byte Counter Register */
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_B1 Registers
-//*****************************************************************************
+/***************************************************************************
 #define UCB1CTLW0                                          (HWREG16(0x40002400)) /* eUSCI_Bx Control Word Register 0 */
 #define UCB1CTLW0_SPI                                      (HWREG16(0x40002400)) /*  */
 #define UCB1CTLW1                                          (HWREG16(0x40002402)) /* eUSCI_Bx Control Word Register 1 */
@@ -1545,9 +1545,9 @@ typedef enum IRQn
 #define UCB1STAT                                           (HWREG8_L(UCB1STATW)) /* eUSCI_Bx Status */
 #define UCB1BCNT                                           (HWREG8_H(UCB1STATW)) /* eUSCI_Bx Byte Counter Register */
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_B2 Registers
-//*****************************************************************************
+/***************************************************************************
 #define UCB2CTLW0                                          (HWREG16(0x40002800)) /* eUSCI_Bx Control Word Register 0 */
 #define UCB2CTLW0_SPI                                      (HWREG16(0x40002800)) /*  */
 #define UCB2CTLW1                                          (HWREG16(0x40002802)) /* eUSCI_Bx Control Word Register 1 */
@@ -1608,9 +1608,9 @@ typedef enum IRQn
 #define UCB2STAT                                           (HWREG8_L(UCB2STATW)) /* eUSCI_Bx Status */
 #define UCB2BCNT                                           (HWREG8_H(UCB2STATW)) /* eUSCI_Bx Byte Counter Register */
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_B3 Registers
-//*****************************************************************************
+/***************************************************************************
 #define UCB3CTLW0                                          (HWREG16(0x40002C00)) /* eUSCI_Bx Control Word Register 0 */
 #define UCB3CTLW0_SPI                                      (HWREG16(0x40002C00)) /*  */
 #define UCB3CTLW1                                          (HWREG16(0x40002C02)) /* eUSCI_Bx Control Word Register 1 */
@@ -1671,9 +1671,9 @@ typedef enum IRQn
 #define UCB3STAT                                           (HWREG8_L(UCB3STATW)) /* eUSCI_Bx Status */
 #define UCB3BCNT                                           (HWREG8_H(UCB3STATW)) /* eUSCI_Bx Byte Counter Register */
 
-//*****************************************************************************
+/***************************************************************************
 // FLCTL Registers
-//*****************************************************************************
+/***************************************************************************
 #define FLCTL_POWER_STAT                                   (HWREG32(0x40011000)) /* Power Status Register */
 #define FLCTL_BANK0_RDCTL                                  (HWREG32(0x40011010)) /* Bank0 Read Control Register */
 #define FLCTL_BANK1_RDCTL                                  (HWREG32(0x40011014)) /* Bank1 Read Control Register */
@@ -1778,9 +1778,9 @@ typedef enum IRQn
 #define OFS_FLCTL_BURSTPRG_TIMCTL                          (0x00000120)          /* Burst Program Timing Control Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // FPB Registers
-//*****************************************************************************
+/***************************************************************************
 #define FPB_FP_CTRL                                        (HWREG32(0xE0002000)) /* Flash Patch Control Register */
 #define FPB_FP_REMAP                                       (HWREG32(0xE0002004)) /* Flash Patch Remap Register */
 #define FPB_FP_COMP0                                       (HWREG32(0xE0002008)) /* Flash Patch Comparator Registers */
@@ -1805,9 +1805,9 @@ typedef enum IRQn
 #define OFS_FPB_FP_COMP7                                   (0x00000024)          /* Flash Patch Comparator Registers */
 
 
-//*****************************************************************************
+/***************************************************************************
 // FPU Registers
-//*****************************************************************************
+/***************************************************************************
 #define FPU_FPCCR                                          (HWREG32(0xE000EF34)) /* Floating Point Context Control Register */
 #define FPU_FPCAR                                          (HWREG32(0xE000EF38)) /* Floating-Point Context Address Register */
 #define FPU_FPDSCR                                         (HWREG32(0xE000EF3C)) /* Floating Point Default Status Control Register */
@@ -1822,9 +1822,9 @@ typedef enum IRQn
 #define OFS_FPU_MVFR1                                      (0x00000F44)          /* Media and FP Feature Register 1 (MVFR1) */
 
 
-//*****************************************************************************
+/***************************************************************************
 // ITM Registers
-//*****************************************************************************
+/***************************************************************************
 #define ITM_STIM0                                          (HWREG32(0xE0000000)) /* ITM Stimulus Port 0 */
 #define ITM_STIM1                                          (HWREG32(0xE0000004)) /* ITM Stimulus Port 1 */
 #define ITM_STIM2                                          (HWREG32(0xE0000008)) /* ITM Stimulus Port 2 */
@@ -1907,9 +1907,9 @@ typedef enum IRQn
 #define OFS_ITM_LSR                                        (0x00000FB4)          /* ITM Lock Status Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // MPU Registers
-//*****************************************************************************
+/***************************************************************************
 #define MPU_TYPE                                           (HWREG32(0xE000ED90)) /* MPU Type Register */
 #define MPU_CTRL                                           (HWREG32(0xE000ED94)) /* MPU Control Register */
 #define MPU_RNR                                            (HWREG32(0xE000ED98)) /* MPU Region Number Register */
@@ -1936,9 +1936,9 @@ typedef enum IRQn
 #define OFS_MPU_RASR_A3                                    (0x00000DB8)          /* MPU Alias 3 Region Attribute and Size register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // NVIC Registers
-//*****************************************************************************
+/***************************************************************************
 #define NVIC_ISER0                                         (HWREG32(0xE000E100)) /* Irq 0 to 31 Set Enable Register */
 #define NVIC_ISER1                                         (HWREG32(0xE000E104)) /* Irq 32 to 63 Set Enable Register */
 #define NVIC_ICER0                                         (HWREG32(0xE000E180)) /* Irq 0 to 31 Clear Enable Register */
@@ -1997,9 +1997,9 @@ typedef enum IRQn
 #define OFS_NVIC_STIR                                      (0x00000F00)          /* Software Trigger Interrupt Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // PCM Registers
-//*****************************************************************************
+/***************************************************************************
 #define PCMCTL0                                            (HWREG32(0x40010000)) /* Control 0 Register */
 #define PCMCTL1                                            (HWREG32(0x40010004)) /* Control 1 Register */
 #define PCMIE                                              (HWREG32(0x40010008)) /* Interrupt Enable Register */
@@ -2014,9 +2014,9 @@ typedef enum IRQn
 #define OFS_PCMCLRIFG                                      (0x00000010)          /* Clear Interrupt Flag Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // PMAP Registers
-//*****************************************************************************
+/***************************************************************************
 #define PMAPKEYID                                          (HWREG16(0x40005000)) /* Port Mapping Key Register */
 #define PMAPCTL                                            (HWREG16(0x40005002)) /* Port Mapping Control Register */
 #define P1MAP01                                            (HWREG16(0x40005008)) /* Port mapping register, P1.0 and P1.1 */
@@ -2081,9 +2081,9 @@ typedef enum IRQn
 #define OFS_P7MAP67                                        (0x003e)              /* Port mapping register, P7.6 and P7.7 */
 
 
-//*****************************************************************************
+/***************************************************************************
 // PSS Registers
-//*****************************************************************************
+/***************************************************************************
 #define PSSKEY                                             (HWREG32(0x40010800)) /* Key Register */
 #define PSSCTL0                                            (HWREG32(0x40010804)) /* Control 0 Register */
 #define PSSIE                                              (HWREG32(0x40010834)) /* Interrupt Enable Register */
@@ -2098,9 +2098,9 @@ typedef enum IRQn
 #define OFS_PSSCLRIFG                                      (0x0000003c)          /* Clear Interrupt Flag Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // REF_A Registers
-//*****************************************************************************
+/***************************************************************************
 #define REFCTL0                                            (HWREG16(0x40003000)) /* REF Control Register 0 */
 
 /* Register offsets from REF_A_BASE address */
@@ -2109,9 +2109,9 @@ typedef enum IRQn
 #define REFCTL0_L                                          (HWREG8_L(REFCTL0))   /* REF Control Register 0 */
 #define REFCTL0_H                                          (HWREG8_H(REFCTL0))   /* REF Control Register 0 */
 
-//*****************************************************************************
+/***************************************************************************
 // RSTCTL Registers
-//*****************************************************************************
+/***************************************************************************
 #define RSTCTL_RESET_REQ                                   (HWREG32(0xE0042000)) /* Reset Request Register */
 #define RSTCTL_HARDRESET_STAT                              (HWREG32(0xE0042004)) /* Hard Reset Status Register */
 #define RSTCTL_HARDRESET_CLR                               (HWREG32(0xE0042008)) /* Hard Reset Status Clear Register */
@@ -2146,9 +2146,9 @@ typedef enum IRQn
 #define OFS_RSTCTL_REBOOTRESET_CLR                         (0x0000011c)          /* Reboot Reset Status Clear Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // RTC_C Registers
-//*****************************************************************************
+/***************************************************************************
 #define RTCCTL0                                            (HWREG16(0x40004400)) /* RTCCTL0 Register */
 #define RTCCTL13                                           (HWREG16(0x40004402)) /* RTCCTL13 Register */
 #define RTCOCAL                                            (HWREG16(0x40004404)) /* RTCOCAL Register */
@@ -2235,9 +2235,9 @@ typedef enum IRQn
 #define RTCADAY                                            (HWREG8_H(RTCADOWDAY))/* Real-Time Clock Day of Month Alarm */
 #define RTCADOWDAY_H                                       (HWREG8_H(RTCADOWDAY))/* Real-Time Clock Day of Month Alarm */
 
-//*****************************************************************************
+/***************************************************************************
 // SCB Registers
-//*****************************************************************************
+/***************************************************************************
 #define SCB_CPUID                                          (HWREG32(0xE000ED00)) /* CPUID Base Register */
 #define SCB_ICSR                                           (HWREG32(0xE000ED04)) /* Interrupt Control State Register */
 #define SCB_VTOR                                           (HWREG32(0xE000ED08)) /* Vector Table Offset Register */
@@ -2302,9 +2302,9 @@ typedef enum IRQn
 #define OFS_SCB_CPACR                                      (0x00000D88)          /* Coprocessor Access Control Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // SCnSCB Registers
-//*****************************************************************************
+/***************************************************************************
 #define SCnSCB_ICTR                                        (HWREG32(0xE000E004)) /* Interrupt Control Type Register */
 #define SCnSCB_ACTLR                                       (HWREG32(0xE000E008)) /* Auxiliary Control Register */
 
@@ -2313,9 +2313,9 @@ typedef enum IRQn
 #define OFS_SCnSCB_ACTLR                                   (0x00000008)          /* Auxiliary Control Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // SYSCTL Registers
-//*****************************************************************************
+/***************************************************************************
 #define SYSCTL_REBOOT_CTL                                  (HWREG32(0xE0043000)) /* Reboot Control Register */
 #define SYSCTL_NMI_CTLSTAT                                 (HWREG32(0xE0043004)) /* NMI Control and Status Register */
 #define SYSCTL_WDTRESET_CTL                                (HWREG32(0xE0043008)) /* Watchdog Reset Control Register */
@@ -2354,9 +2354,9 @@ typedef enum IRQn
 #define OFS_SYSCTL_SYSTEM_STAT                             (0x00001020)          /* System Status Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // SYSTICK Registers
-//*****************************************************************************
+/***************************************************************************
 #define SYSTICK_STCSR                                      (HWREG32(0xE000E010)) /* SysTick Control and Status Register */
 #define SYSTICK_STRVR                                      (HWREG32(0xE000E014)) /* SysTick Reload Value Register */
 #define SYSTICK_STCVR                                      (HWREG32(0xE000E018)) /* SysTick Current Value Register */
@@ -2369,9 +2369,9 @@ typedef enum IRQn
 #define OFS_SYSTICK_STCR                                   (0x0000001C)          /* SysTick Calibration Value Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // TIMER32 Registers
-//*****************************************************************************
+/***************************************************************************
 #define TIMER32_LOAD1                                      (HWREG32(0x4000C000)) /* Timer 1 Load Register */
 #define TIMER32_VALUE1                                     (HWREG32(0x4000C004)) /* Timer 1 Current Value Register */
 #define TIMER32_CONTROL1                                   (HWREG32(0x4000C008)) /* Timer 1 Timer Control Register */
@@ -2404,9 +2404,9 @@ typedef enum IRQn
 #define OFS_TIMER32_BGLOAD2                                (0x00000038)          /* Timer 2 Background Load Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // TIMER_A0 Registers
-//*****************************************************************************
+/***************************************************************************
 #define TA0CTL                                             (HWREG16(0x40000000)) /* TimerAx Control Register */
 #define TA0CCTL0                                           (HWREG16(0x40000002)) /* Timer_A Capture/Compare Control Register */
 #define TA0CCTL1                                           (HWREG16(0x40000004)) /* Timer_A Capture/Compare Control Register */
@@ -2447,9 +2447,9 @@ typedef enum IRQn
 #define OFS_TA0IV                                          (0x002e)              /* TimerAx Interrupt Vector Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // TIMER_A1 Registers
-//*****************************************************************************
+/***************************************************************************
 #define TA1CTL                                             (HWREG16(0x40000400)) /* TimerAx Control Register */
 #define TA1CCTL0                                           (HWREG16(0x40000402)) /* Timer_A Capture/Compare Control Register */
 #define TA1CCTL1                                           (HWREG16(0x40000404)) /* Timer_A Capture/Compare Control Register */
@@ -2490,9 +2490,9 @@ typedef enum IRQn
 #define OFS_TA1IV                                          (0x002e)              /* TimerAx Interrupt Vector Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // TIMER_A2 Registers
-//*****************************************************************************
+/***************************************************************************
 #define TA2CTL                                             (HWREG16(0x40000800)) /* TimerAx Control Register */
 #define TA2CCTL0                                           (HWREG16(0x40000802)) /* Timer_A Capture/Compare Control Register */
 #define TA2CCTL1                                           (HWREG16(0x40000804)) /* Timer_A Capture/Compare Control Register */
@@ -2533,9 +2533,9 @@ typedef enum IRQn
 #define OFS_TA2IV                                          (0x002e)              /* TimerAx Interrupt Vector Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // TIMER_A3 Registers
-//*****************************************************************************
+/***************************************************************************
 #define TA3CTL                                             (HWREG16(0x40000C00)) /* TimerAx Control Register */
 #define TA3CCTL0                                           (HWREG16(0x40000C02)) /* Timer_A Capture/Compare Control Register */
 #define TA3CCTL1                                           (HWREG16(0x40000C04)) /* Timer_A Capture/Compare Control Register */
@@ -2576,9 +2576,9 @@ typedef enum IRQn
 #define OFS_TA3IV                                          (0x002e)              /* TimerAx Interrupt Vector Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // TLV Registers
-//*****************************************************************************
+/***************************************************************************
 #define TLV_TLV_CHECKSUM                                   (HWREG32(0x00201000)) /* TLV Checksum */
 #define TLV_DEVICE_INFO_TAG                                (HWREG32(0x00201004)) /* Device Info Tag */
 #define TLV_DEVICE_INFO_LEN                                (HWREG32(0x00201008)) /* Device Info Length */
@@ -2741,22 +2741,22 @@ typedef enum IRQn
 #define OFS_TLV_TLV_END                                    (0x00000138)          /* TLV End Word */
 
 
-//*****************************************************************************
+/***************************************************************************
 // WDT_A Registers
-//*****************************************************************************
+/***************************************************************************
 #define WDTCTL                                             (HWREG16(0x4000480C)) /* Watchdog Timer Control Register */
 
 /* Register offsets from WDT_A_BASE address */
 #define OFS_WDTCTL                                         (0x000c)              /* Watchdog Timer Control Register */
 
 
-//*****************************************************************************
+/***************************************************************************
 // CMSIS-format peripheral registers
-//*****************************************************************************
+/***************************************************************************
 
-//*****************************************************************************
+/***************************************************************************
 // ADC14 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* ADC14CTL0 Register */
     __IO uint32_t r;
@@ -3653,9 +3653,9 @@ typedef struct {
 } ADC14_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // AES256 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* AESACTL0 Register */
     __IO uint16_t r;
@@ -3730,9 +3730,9 @@ typedef struct {
 } AES256_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // CAPTIO0 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   uint8_t  RESERVED0[14];
   union {    /* CAPTIO0CTL Register */
@@ -3749,9 +3749,9 @@ typedef struct {
 } CAPTIO0_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // CAPTIO1 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   uint8_t  RESERVED0[14];
   union {    /* CAPTIO1CTL Register */
@@ -3768,9 +3768,9 @@ typedef struct {
 } CAPTIO1_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // COMP_E0 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* CE0CTL0 Register */
     __IO uint16_t r;
@@ -3852,9 +3852,9 @@ typedef struct {
 } COMP_E0_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // COMP_E1 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* CE1CTL0 Register */
     __IO uint16_t r;
@@ -3936,9 +3936,9 @@ typedef struct {
 } COMP_E1_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // CRC32 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   __IO uint16_t rCRC32DI; /* Data Input for CRC32 Signature Computation */
   uint8_t  RESERVED0[2];
@@ -3958,9 +3958,9 @@ typedef struct {
 } CRC32_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // CS Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* CSKEY Register */
     __IO uint32_t r;
@@ -4222,9 +4222,9 @@ typedef struct {
 } CS_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // DIO Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* PAIN Register */
     __I uint16_t r;
@@ -4699,9 +4699,9 @@ typedef struct {
 } DIO_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // DMA Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* DMA_DEVICE_CFG Register */
     __I uint32_t r;
@@ -5123,9 +5123,9 @@ typedef struct {
 } DMA_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_A0 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* UCA0CTLW0 Register */
     __IO uint16_t r;
@@ -5277,9 +5277,9 @@ typedef struct {
 } EUSCI_A0_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_A1 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* UCA1CTLW0 Register */
     __IO uint16_t r;
@@ -5431,9 +5431,9 @@ typedef struct {
 } EUSCI_A1_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_A2 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* UCA2CTLW0 Register */
     __IO uint16_t r;
@@ -5585,9 +5585,9 @@ typedef struct {
 } EUSCI_A2_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_A3 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* UCA3CTLW0 Register */
     __IO uint16_t r;
@@ -5739,9 +5739,9 @@ typedef struct {
 } EUSCI_A3_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_B0 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* UCB0CTLW0 Register */
     __IO uint16_t r;
@@ -5948,9 +5948,9 @@ typedef struct {
 } EUSCI_B0_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_B1 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* UCB1CTLW0 Register */
     __IO uint16_t r;
@@ -6157,9 +6157,9 @@ typedef struct {
 } EUSCI_B1_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_B2 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* UCB2CTLW0 Register */
     __IO uint16_t r;
@@ -6366,9 +6366,9 @@ typedef struct {
 } EUSCI_B2_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_B3 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* UCB3CTLW0 Register */
     __IO uint16_t r;
@@ -6575,9 +6575,9 @@ typedef struct {
 } EUSCI_B3_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // FLCTL Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* FLCTL_POWER_STAT Register */
     __I uint32_t r;
@@ -7000,9 +7000,9 @@ typedef struct {
 } FLCTL_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // PCM Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* PCMCTL0 Register */
     __IO uint32_t r;
@@ -7062,9 +7062,9 @@ typedef struct {
 } PCM_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // PMAP Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   __IO uint16_t rKEYID; /* Port Mapping Key Register */
   union {    /* PMAPCTL Register */
@@ -7107,9 +7107,9 @@ typedef struct {
 } PMAP_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // PSS Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* PSSKEY Register */
     __IO uint32_t r;
@@ -7163,9 +7163,9 @@ typedef struct {
 } PSS_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // REF_A Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* REFCTL0 Register */
     __IO uint16_t r;
@@ -7189,9 +7189,9 @@ typedef struct {
 } REF_A_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // RSTCTL Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* RSTCTL_RESET_REQ Register */
     __IO uint32_t r;
@@ -7399,9 +7399,9 @@ typedef struct {
 } RSTCTL_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // RTC_C Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* RTCCTL0 Register */
     __IO uint16_t r;
@@ -7580,9 +7580,9 @@ typedef struct {
 } RTC_C_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // SYSCTL Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* SYS_REBOOT_CTL Register */
     __IO uint32_t r;
@@ -7737,9 +7737,9 @@ typedef struct {
 } SYSCTL_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // TIMER32 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   __IO uint32_t rLOAD1; /* Timer 1 Load Register */
   __I uint32_t rVALUE1; /* Timer 1 Current Value Register */
@@ -7807,9 +7807,9 @@ typedef struct {
 } TIMER32_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // TIMER_A0 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* TA0CTL Register */
     __IO uint16_t r;
@@ -7963,9 +7963,9 @@ typedef struct {
 } TIMER_A0_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // TIMER_A1 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* TA1CTL Register */
     __IO uint16_t r;
@@ -8119,9 +8119,9 @@ typedef struct {
 } TIMER_A1_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // TIMER_A2 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* TA2CTL Register */
     __IO uint16_t r;
@@ -8275,9 +8275,9 @@ typedef struct {
 } TIMER_A2_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // TIMER_A3 Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   union {    /* TA3CTL Register */
     __IO uint16_t r;
@@ -8431,9 +8431,9 @@ typedef struct {
 } TIMER_A3_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // TLV Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   __IO uint32_t rTLV_CHECKSUM; /* TLV Checksum */
   __IO uint32_t rDEVICE_INFO_TAG; /* Device Info Tag */
@@ -8517,9 +8517,9 @@ typedef struct {
 } TLV_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // WDT_A Registers
-//*****************************************************************************
+/***************************************************************************
 typedef struct {
   uint8_t  RESERVED0[12];
   union {    /* WDTCTL Register */
@@ -8536,13 +8536,13 @@ typedef struct {
 } WDT_A_Type;
 
 
-//*****************************************************************************
+/***************************************************************************
 // Peripheral register control bits
-//*****************************************************************************
+/***************************************************************************
 
-//*****************************************************************************
+/***************************************************************************
 // ADC14 Bits
-//*****************************************************************************
+/***************************************************************************
 /* ADC14CTL0[ADC14SC] Bits */
 #define ADC14SC_OFS                                        ( 0)                  /* ADC14SC Offset */
 #define ADC14SC                                            (0x00000001)          /* ADC14 start conversion */
@@ -9155,9 +9155,9 @@ typedef struct {
 #define CLRADC14RDYIFG                                     (0x00000040)          /* clear ADC14RDYIFG */
 
 
-//*****************************************************************************
+/***************************************************************************
 // AES256 Bits
-//*****************************************************************************
+/***************************************************************************
 /* AESACTL0[AESOP] Bits */
 #define AESOP0                                             (0x0001)              /* AESOP Bit 0 */
 #define AESOP1                                             (0x0002)              /* AESOP Bit 1 */
@@ -9385,9 +9385,9 @@ typedef struct {
 #define AESXIN1_M                                          (0xff00)              /* AES data in byte n+1 when AESAXIN is written as half-word */
 
 
-//*****************************************************************************
+/***************************************************************************
 // CAPTIO0 Bits
-//*****************************************************************************
+/***************************************************************************
 /* CAPTIO0CTL[CAPTIOPISEL] Bits */
 #define CAPTIOPISEL0                                       (0x0002)              /* CAPTIOPISEL Bit 0 */
 #define CAPTIOPISEL1                                       (0x0004)              /* CAPTIOPISEL Bit 1 */
@@ -9458,9 +9458,9 @@ typedef struct {
 #define CAPTIOSTATE                                        (0x0200)              /* Capacitive Touch IO state */
 
 
-//*****************************************************************************
+/***************************************************************************
 // CAPTIO1 Bits
-//*****************************************************************************
+/***************************************************************************
 /* CAPTIO1CTL[CAPTIOPISEL] Bits */
 //#define CAPTIOPISEL0                                       (0x0002)              /* CAPTIOPISEL Bit 0 */
 //#define CAPTIOPISEL1                                       (0x0004)              /* CAPTIOPISEL Bit 1 */
@@ -9531,9 +9531,9 @@ typedef struct {
 //#define CAPTIOSTATE                                        (0x0200)              /* Capacitive Touch IO state */
 
 
-//*****************************************************************************
+/***************************************************************************
 // COMP_E0 Bits
-//*****************************************************************************
+/***************************************************************************
 /* CE0CTL0[CEIPSEL] Bits */
 #define CEIPSEL_OFS                                        ( 0)                  /* CEIPSEL Offset */
 #define CEIPSEL_M                                          (0x000f)              /* Channel input selected for the V+ terminal */
@@ -9732,9 +9732,9 @@ typedef struct {
 #define CERDYIE                                            (0x1000)              /* Comparator ready interrupt enable */
 
 
-//*****************************************************************************
+/***************************************************************************
 // COMP_E1 Bits
-//*****************************************************************************
+/***************************************************************************
 /* CE1CTL0[CEIPSEL] Bits */
 //#define CEIPSEL_OFS                                        ( 0)                  /* CEIPSEL Offset */
 //#define CEIPSEL_M                                          (0x000f)              /* Channel input selected for the V+ terminal */
@@ -9933,9 +9933,9 @@ typedef struct {
 //#define CERDYIE                                            (0x1000)              /* Comparator ready interrupt enable */
 
 
-//*****************************************************************************
+/***************************************************************************
 // COREDEBUG Bits
-//*****************************************************************************
+/***************************************************************************
 /* COREDEBUG_DHCSR[COREDEBUG_DHCSR_C_DEBUGEN] Bits */
 #define COREDEBUG_DHCSR_C_DEBUGEN_OFS                      ( 0)                  /* C_DEBUGEN Offset */
 #define COREDEBUG_DHCSR_C_DEBUGEN                          (0x00000001)          /*  */
@@ -10041,14 +10041,14 @@ typedef struct {
 #define COREDEBUG_DEMCR_TRCENA                             (0x01000000)          /*  */
 
 
-//*****************************************************************************
+/***************************************************************************
 // CRC32 Bits
-//*****************************************************************************
+/***************************************************************************
 
 
-//*****************************************************************************
+/***************************************************************************
 // CS Bits
-//*****************************************************************************
+/***************************************************************************
 /* CSKEY[CSKEY] Bits */
 #define CSKEY_OFS                                          ( 0)                  /* CSKEY Offset */
 #define CSKEY_M                                            (0x0000ffff)          /* Write xxxx_695Ah to unlock */
@@ -10623,9 +10623,9 @@ typedef struct {
 #define CSKEY_VAL                                             (0x0000695A)          /* CS control key value */
 
 
-//*****************************************************************************
+/***************************************************************************
 // DIO Bits
-//*****************************************************************************
+/***************************************************************************
 /* PAIN[P1IN] Bits */
 #define P1IN_OFS                                           ( 0)                  /* P1IN Offset */
 #define P1IN_M                                             (0x00ff)              /* Port 1 Input */
@@ -11218,9 +11218,9 @@ typedef struct {
 #define P10IV__P10IFG7                                     (0x0010)              /* Interrupt Source: Port 10.7 interrupt; Interrupt Flag: P10IFG7; Interrupt Priority: Lowest */
 
 
-//*****************************************************************************
+/***************************************************************************
 // DMA Bits
-//*****************************************************************************
+/***************************************************************************
 /* DMA_DEVICE_CFG[DMA_DEVICE_CFG_NUM_DMA_CHANNELS] Bits */
 #define DMA_DEVICE_CFG_NUM_DMA_CHANNELS_OFS                ( 0)                  /* NUM_DMA_CHANNELS Offset */
 #define DMA_DEVICE_CFG_NUM_DMA_CHANNELS_M                  (0x000000ff)          /* Number of DMA channels available */
@@ -11732,9 +11732,9 @@ typedef struct {
 #define UDMA_CHCTL_XFERSIZE_S                              4
 
 
-//*****************************************************************************
+/***************************************************************************
 // DWT Bits
-//*****************************************************************************
+/***************************************************************************
 /* DWT_CTRL[DWT_CTRL_CYCCNTENA] Bits */
 #define DWT_CTRL_CYCCNTENA_OFS                             ( 0)                  /* CYCCNTENA Offset */
 #define DWT_CTRL_CYCCNTENA                                 (0x00000001)          /*  */
@@ -12018,9 +12018,9 @@ typedef struct {
 #define DWT_FUNCTION3_MATCHED                              (0x01000000)          /*  */
 
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_A0 Bits
-//*****************************************************************************
+/***************************************************************************
 /* UCA0CTLW0[UCSWRST] Bits */
 #define UCSWRST_OFS                                        ( 0)                  /* UCSWRST Offset */
 #define UCSWRST                                            (0x0001)              /* Software reset enable */
@@ -12259,9 +12259,9 @@ typedef struct {
 //#define UCTXIFG                                            (0x0002)              /* Transmit interrupt flag */
 
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_A1 Bits
-//*****************************************************************************
+/***************************************************************************
 /* UCA1CTLW0[UCSWRST] Bits */
 //#define UCSWRST_OFS                                        ( 0)                  /* UCSWRST Offset */
 //#define UCSWRST                                            (0x0001)              /* Software reset enable */
@@ -12500,9 +12500,9 @@ typedef struct {
 //#define UCTXIFG                                            (0x0002)              /* Transmit interrupt flag */
 
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_A2 Bits
-//*****************************************************************************
+/***************************************************************************
 /* UCA2CTLW0[UCSWRST] Bits */
 //#define UCSWRST_OFS                                        ( 0)                  /* UCSWRST Offset */
 //#define UCSWRST                                            (0x0001)              /* Software reset enable */
@@ -12741,9 +12741,9 @@ typedef struct {
 //#define UCTXIFG                                            (0x0002)              /* Transmit interrupt flag */
 
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_A3 Bits
-//*****************************************************************************
+/***************************************************************************
 /* UCA3CTLW0[UCSWRST] Bits */
 //#define UCSWRST_OFS                                        ( 0)                  /* UCSWRST Offset */
 //#define UCSWRST                                            (0x0001)              /* Software reset enable */
@@ -12982,9 +12982,9 @@ typedef struct {
 //#define UCTXIFG                                            (0x0002)              /* Transmit interrupt flag */
 
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_B0 Bits
-//*****************************************************************************
+/***************************************************************************
 /* UCB0CTLW0[UCSWRST] Bits */
 //#define UCSWRST_OFS                                        ( 0)                  /* UCSWRST Offset */
 //#define UCSWRST                                            (0x0001)              /* Software reset enable */
@@ -13297,9 +13297,9 @@ typedef struct {
 //#define UCTXIFG                                            (0x0002)              /* Transmit interrupt flag */
 
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_B1 Bits
-//*****************************************************************************
+/***************************************************************************
 /* UCB1CTLW0[UCSWRST] Bits */
 //#define UCSWRST_OFS                                        ( 0)                  /* UCSWRST Offset */
 //#define UCSWRST                                            (0x0001)              /* Software reset enable */
@@ -13612,9 +13612,9 @@ typedef struct {
 //#define UCTXIFG                                            (0x0002)              /* Transmit interrupt flag */
 
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_B2 Bits
-//*****************************************************************************
+/***************************************************************************
 /* UCB2CTLW0[UCSWRST] Bits */
 //#define UCSWRST_OFS                                        ( 0)                  /* UCSWRST Offset */
 //#define UCSWRST                                            (0x0001)              /* Software reset enable */
@@ -13927,9 +13927,9 @@ typedef struct {
 //#define UCTXIFG                                            (0x0002)              /* Transmit interrupt flag */
 
 
-//*****************************************************************************
+/***************************************************************************
 // EUSCI_B3 Bits
-//*****************************************************************************
+/***************************************************************************
 /* UCB3CTLW0[UCSWRST] Bits */
 //#define UCSWRST_OFS                                        ( 0)                  /* UCSWRST Offset */
 //#define UCSWRST                                            (0x0001)              /* Software reset enable */
@@ -14242,9 +14242,9 @@ typedef struct {
 //#define UCTXIFG                                            (0x0002)              /* Transmit interrupt flag */
 
 
-//*****************************************************************************
+/***************************************************************************
 // FLCTL Bits
-//*****************************************************************************
+/***************************************************************************
 /* FLCTL_POWER_STAT[FLCTL_POWER_STAT_PSTAT] Bits */
 #define FLCTL_POWER_STAT_PSTAT_OFS                         ( 0)                  /* PSTAT Offset */
 #define FLCTL_POWER_STAT_PSTAT_M                           (0x00000007)          /*  */
@@ -14938,9 +14938,9 @@ typedef struct {
 #define FLCTL_BURSTPRG_TIMCTL_ACTIVE_M                     (0x0fffff00)          /*  */
 
 
-//*****************************************************************************
+/***************************************************************************
 // FPB Bits
-//*****************************************************************************
+/***************************************************************************
 /* FPB_FP_CTRL[FPB_FP_CTRL_ENABLE] Bits */
 #define FPB_FP_CTRL_ENABLE_OFS                             ( 0)                  /* ENABLE Offset */
 #define FPB_FP_CTRL_ENABLE                                 (0x00000001)          /*  */
@@ -15094,9 +15094,9 @@ typedef struct {
 #define FPB_FP_COMP7_REPLACE_3                             (0xc0000000)          /* set BKPT on both lower and upper halfwords. */
 
 
-//*****************************************************************************
+/***************************************************************************
 // FPU Bits
-//*****************************************************************************
+/***************************************************************************
 /* FPU_FPCCR[FPU_FPCCR_ASPEN] Bits */
 #define FPU_FPCCR_ASPEN_OFS                                (31)                  /* ASPEN Offset */
 #define FPU_FPCCR_ASPEN                                    (0x80000000)          /*  */
@@ -15177,9 +15177,9 @@ typedef struct {
 #define FPU_MVFR1_FTZ_MODE_M                               (0x0000000f)          /*  */
 
 
-//*****************************************************************************
+/***************************************************************************
 // ITM Bits
-//*****************************************************************************
+/***************************************************************************
 /* ITM_TPR[ITM_TPR_PRIVMASK] Bits */
 #define ITM_TPR_PRIVMASK_OFS                               ( 0)                  /* PRIVMASK Offset */
 #define ITM_TPR_PRIVMASK_M                                 (0x0000000f)          /*  */
@@ -15230,9 +15230,9 @@ typedef struct {
 #define ITM_LSR_BYTEACC                                    (0x00000004)          /*  */
 
 
-//*****************************************************************************
+/***************************************************************************
 // MPU Bits
-//*****************************************************************************
+/***************************************************************************
 /* MPU_TYPE[MPU_TYPE_SEPARATE] Bits */
 #define MPU_TYPE_SEPARATE_OFS                              ( 0)                  /* SEPARATE Offset */
 #define MPU_TYPE_SEPARATE                                  (0x00000001)          /*  */
@@ -15379,9 +15379,9 @@ typedef struct {
 #define MPU_RASR_AP_NOEXEC                                 (0x10000000)          /* Instruction access disabled */
 
 
-//*****************************************************************************
+/***************************************************************************
 // NVIC Bits
-//*****************************************************************************
+/***************************************************************************
 /* NVIC_IPR0[NVIC_IPR0_PRI_0] Bits */
 #define NVIC_IPR0_PRI_0_OFS                                ( 0)                  /* PRI_0 Offset */
 #define NVIC_IPR0_PRI_0_M                                  (0x000000ff)          /*  */
@@ -15579,9 +15579,9 @@ typedef struct {
 #define NVIC_STIR_INTID_M                                  (0x000001ff)          /*  */
 
 
-//*****************************************************************************
+/***************************************************************************
 // PCM Bits
-//*****************************************************************************
+/***************************************************************************
 /* PCMCTL0[AMR] Bits */
 #define AMR_OFS                                            ( 0)                  /* AMR Offset */
 #define AMR_M                                              (0x0000000f)          /* Active Mode Request */
@@ -15709,9 +15709,9 @@ typedef struct {
 #define PCM_CTL_KEY_VAL                                    (0x695A0000)          /* PCM key value */
 
 
-//*****************************************************************************
+/***************************************************************************
 // PMAP Bits
-//*****************************************************************************
+/***************************************************************************
 /* PMAPCTL[PMAPLOCKED] Bits */
 #define PMAPLOCKED_OFS                                     ( 0)                  /* PMAPLOCKED Offset */
 #define PMAPLOCKED                                         (0x0001)              /* Port mapping lock bit */
@@ -15769,9 +15769,9 @@ typedef struct {
 #define PMAP_KEYID_VAL                                     (0x2D52)              /* Port mapping controller write access key */
  
 
-//*****************************************************************************
+/***************************************************************************
 // PSS Bits
-//*****************************************************************************
+/***************************************************************************
 /* PSSKEY[PSSKEY] Bits */
 #define PSSKEY_OFS                                         ( 0)                  /* PSSKEY Offset */
 #define PSSKEY_M                                           (0x0000ffff)          /* PSS control key */
@@ -15829,9 +15829,9 @@ typedef struct {
 #define PSS_KEY_KEY_VAL                                    (0x0000695A)          /* PSS control key value */
 
 
-//*****************************************************************************
+/***************************************************************************
 // REF_A Bits
-//*****************************************************************************
+/***************************************************************************
 /* REFCTL0[REFON] Bits */
 #define REFON_OFS                                          ( 0)                  /* REFON Offset */
 #define REFON                                              (0x0001)              /* Reference enable */
@@ -15875,9 +15875,9 @@ typedef struct {
 #define REFBGRDY                                           (0x2000)              /* Buffered bandgap voltage ready status */
 
 
-//*****************************************************************************
+/***************************************************************************
 // RSTCTL Bits
-//*****************************************************************************
+/***************************************************************************
 /* RSTCTL_RESET_REQ[RSTCTL_RESET_REQ_SOFT_REQ] Bits */
 #define RSTCTL_RESET_REQ_SOFT_REQ_OFS                      ( 0)                  /* SOFT_REQ Offset */
 #define RSTCTL_RESET_REQ_SOFT_REQ                          (0x00000001)          /* Soft Reset request */
@@ -16216,9 +16216,9 @@ typedef struct {
 #define RSTCTL_RESETREQ_RSTKEY_VAL                         (0x00006900)          /* Key value to enable writes to bits 1-0 */
 
 
-//*****************************************************************************
+/***************************************************************************
 // RTC_C Bits
-//*****************************************************************************
+/***************************************************************************
 /* RTCCTL0[RTCRDYIFG] Bits */
 #define RTCRDYIFG_OFS                                      ( 0)                  /* RTCRDYIFG Offset */
 #define RTCRDYIFG                                          (0x0001)              /* Real-time clock ready interrupt flag */
@@ -16500,9 +16500,9 @@ typedef struct {
 #define RTCKEY_VAL                                          (0xA500)              /* RTC_C Key Value for RTC_C write access */
 
 
-//*****************************************************************************
+/***************************************************************************
 // SCB Bits
-//*****************************************************************************
+/***************************************************************************
 /* SCB_CPUID[SCB_CPUID_REVISION] Bits */
 #define SCB_CPUID_REVISION_OFS                             ( 0)                  /* REVISION Offset */
 #define SCB_CPUID_REVISION_M                               (0x0000000f)          /*  */
@@ -17142,9 +17142,9 @@ typedef struct {
 #define SCB_CPACR_CP10_M                                   (0x00300000)          /*  */
 
 
-//*****************************************************************************
+/***************************************************************************
 // SCnSCB Bits
-//*****************************************************************************
+/***************************************************************************
 /* SCSCB_ICTR[SCNSCB_ICTR_INTLINESNUM] Bits */
 #define SCNSCB_ICTR_INTLINESNUM_OFS                        ( 0)                  /* INTLINESNUM Offset */
 #define SCNSCB_ICTR_INTLINESNUM_M                          (0x0000001f)          /*  */
@@ -17159,9 +17159,9 @@ typedef struct {
 #define SCNSCB_ACTLR_DISFOLD                               (0x00000004)          /*  */
 
 
-//*****************************************************************************
+/***************************************************************************
 // SYSCTL Bits
-//*****************************************************************************
+/***************************************************************************
 /* SYSCTL_REBOOT_CTL[SYSCTL_REBOOT_CTL_REBOOT] Bits */
 #define SYSCTL_REBOOT_CTL_REBOOT_OFS                       ( 0)                  /* REBOOT Offset */
 #define SYSCTL_REBOOT_CTL_REBOOT                           (0x00000001)          /* Write 1 initiates a Reboot of the device */
@@ -17350,9 +17350,9 @@ typedef struct {
 #define SYSCTL_REBOOT_CTL_WKEY_VAL                         (0x00006900)          /* Key value to enable writes to bit 0 */
                                                                                 /* cleared */
 
-//*****************************************************************************
+/***************************************************************************
 // SYSTICK Bits
-//*****************************************************************************
+/***************************************************************************
 /* SYSTICK_STCSR[SYSTICK_STCSR_ENABLE] Bits */
 #define SYSTICK_STCSR_ENABLE_OFS                           ( 0)                  /* ENABLE Offset */
 #define SYSTICK_STCSR_ENABLE                               (0x00000001)          /*  */
@@ -17382,9 +17382,9 @@ typedef struct {
 #define SYSTICK_STCR_NOREF                                 (0x80000000)          /*  */
 
 
-//*****************************************************************************
+/***************************************************************************
 // TIMER32 Bits
-//*****************************************************************************
+/***************************************************************************
 /* TIMER32_CONTROL1[TIMER32_CONTROL1_ONESHOT] Bits */
 #define TIMER32_CONTROL1_ONESHOT_OFS                       ( 0)                  /* ONESHOT Offset */
 #define TIMER32_CONTROL1_ONESHOT                           (0x00000001)          /* Selects one-shot or wrapping counter mode */
@@ -17445,9 +17445,9 @@ typedef struct {
 #define TIMER32_MIS2_IFG                                   (0x00000001)          /* Enabled interrupt status */
 
 
-//*****************************************************************************
+/***************************************************************************
 // TIMER_A0 Bits
-//*****************************************************************************
+/***************************************************************************
 /* TA0CTL[TAIFG] Bits */
 #define TAIFG_OFS                                          ( 0)                  /* TAIFG Offset */
 #define TAIFG                                              (0x0001)              /* TimerA interrupt flag */
@@ -17584,9 +17584,9 @@ typedef struct {
 #define TAIDEX__8                                          (0x0007)              /* Divide by 8 */
 
 
-//*****************************************************************************
+/***************************************************************************
 // TIMER_A1 Bits
-//*****************************************************************************
+/***************************************************************************
 /* TA1CTL[TAIFG] Bits */
 //#define TAIFG_OFS                                          ( 0)                  /* TAIFG Offset */
 //#define TAIFG                                              (0x0001)              /* TimerA interrupt flag */
@@ -17723,9 +17723,9 @@ typedef struct {
 //#define TAIDEX__8                                          (0x0007)              /* Divide by 8 */
 
 
-//*****************************************************************************
+/***************************************************************************
 // TIMER_A2 Bits
-//*****************************************************************************
+/***************************************************************************
 /* TA2CTL[TAIFG] Bits */
 //#define TAIFG_OFS                                          ( 0)                  /* TAIFG Offset */
 //#define TAIFG                                              (0x0001)              /* TimerA interrupt flag */
@@ -17862,9 +17862,9 @@ typedef struct {
 //#define TAIDEX__8                                          (0x0007)              /* Divide by 8 */
 
 
-//*****************************************************************************
+/***************************************************************************
 // TIMER_A3 Bits
-//*****************************************************************************
+/***************************************************************************
 /* TA3CTL[TAIFG] Bits */
 //#define TAIFG_OFS                                          ( 0)                  /* TAIFG Offset */
 //#define TAIFG                                              (0x0001)              /* TimerA interrupt flag */
@@ -18001,14 +18001,14 @@ typedef struct {
 //#define TAIDEX__8                                          (0x0007)              /* Divide by 8 */
 
 
-//*****************************************************************************
+/***************************************************************************
 // TLV Bits
-//*****************************************************************************
+/***************************************************************************
 
 
-//*****************************************************************************
+/***************************************************************************
 // WDT_A Bits
-//*****************************************************************************
+/***************************************************************************
 /* WDTCTL[WDTIS] Bits */
 #define WDTIS_OFS                                          ( 0)                  /* WDTIS Offset */
 #define WDTIS_M                                            (0x0007)              /* Watchdog timer interval select */
@@ -18052,9 +18052,9 @@ typedef struct {
 /* Pre-defined bitfield values */
 #define WDTPW                                              (0x5A00)              /* WDT Key Value for WDT write access */
 
-//*****************************************************************************
+/***************************************************************************
 // BSL
-//*****************************************************************************
+/***************************************************************************
 #define BSL_DEFAULT_PARAM                                  (0xFC48FFFF)          /* I2C slave address = 0x48, Interface selection = Auto */
 #define BSL_API_TABLE_ADDR                                 (0x00202000)          /* Address of BSL API table */
 #define BSL_ENTRY_FUNCTION                                 (*((uint32_t *)BSL_API_TABLE_ADDR))
@@ -18066,9 +18066,9 @@ typedef struct {
 
 #define BSL_INVOKE(x)                                      ((void (*)())BSL_ENTRY_FUNCTION)((uint32_t) x) /* Invoke the BSL with paramters */
 
-//*****************************************************************************
+/***************************************************************************
 // ULP Advisor
-//*****************************************************************************
+/***************************************************************************
 #ifdef __TMS470__
 #pragma ULP_PORT_CONFIG(1,DIR={0x40004C04,8},OUT={0x40004C02,8},SEL1={0x40004C0A,8},SEL2={0x40004C0C,8})
 #pragma ULP_PORT_CONFIG(2,DIR={0x40004C05,8},OUT={0x40004C03,8},SEL1={0x40004C0B,8},SEL2={0x40004C0D,8})
@@ -18082,9 +18082,9 @@ typedef struct {
 #pragma ULP_PORT_CONFIG(10,DIR={0x40004C85,8},OUT={0x40004C83,8},SEL1={0x40004C8B,8},SEL2={0x40004C8D,8})
 #endif
 
-//*****************************************************************************
+/***************************************************************************
 // NVIC interrupts
-//*****************************************************************************
+/***************************************************************************
 
 // System exceptions
 #define FAULT_NMI                                          ( 2)                  /* NMI fault */

@@ -10,4 +10,4 @@
 
 #endif /* TRXOS_TEST_H */
 
-//*** end of file ***//
+/* end of file */

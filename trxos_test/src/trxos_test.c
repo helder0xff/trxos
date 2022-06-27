@@ -41,7 +41,7 @@ int main( void ) {
     TRXOS_add_main_thread(&main_thread_1, 0);
     TRXOS_add_main_thread(&main_thread_2, 0);
     TRXOS_add_periodic_thread(&periodic_thread_2, 3600000, 0);
-    TRXOS_init();
+    TRXOS_start();
 
     while(0 == 0) {
     	;

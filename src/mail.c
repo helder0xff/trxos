@@ -1,14 +1,20 @@
+/**
+ * @file	mail.c
+ * @author	helder
+ * @brief	Source file of the RTOS mail box.
+ */
+
 #include <mail.h>
 #include <assert.h>
 #include <stddef.h>
 
-void MAIL_Init(MAIL_box_t* mail_box) {
+void MAIL_init(MAIL_box_t* mail_box) {
 	assert(NULL != mail_box);
 
 	mail_box->state = MAIL_EMPTY;
 }
 
-int8_t MAIL_Write(MAIL_box_t* mail_box, int32_t message) {
+int8_t MAIL_write(MAIL_box_t* mail_box, int32_t message) {
 	assert(NULL != mail_box);
 	int8_t ret = MAIL_NOT_SENT;
 
@@ -21,7 +27,7 @@ int8_t MAIL_Write(MAIL_box_t* mail_box, int32_t message) {
 	return ret;
 }
 
-int8_t MAIL_Read(MAIL_box_t* mail_box, int32_t* message) {
+int8_t MAIL_read(MAIL_box_t* mail_box, int32_t* message) {
 	assert(NULL != mail_box);
 	assert(NULL != message);
 	int8_t ret = MAIL_NOT_READ;
@@ -35,7 +41,7 @@ int8_t MAIL_Read(MAIL_box_t* mail_box, int32_t* message) {
 	return ret;
 }
 
-void MAIL_Empty(MAIL_box_t* mail_box) {
+void MAIL_empty(MAIL_box_t* mail_box) {
 	assert(NULL != mail_box);
 
 	mail_box->state = MAIL_EMPTY;

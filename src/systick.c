@@ -1,3 +1,9 @@
+/**
+ * @file	systick.c
+ * @author	helder
+ * @brief	Source file of the SysTick module.
+ */
+
 #include <systick.h>
 #include <ll.h>
 
@@ -13,7 +19,7 @@ extern LL_list_t g_main_thread_list;
 #define SYSPRI3         (*((volatile uint32_t *)0xE000ED20))
 #endif
 
-void SYSTICK_Init(uint32_t period_ms) {
+void SYSTICK_init(uint32_t period_ms) {
 	STCTRL 		= 0; 									/* Disable. */
 	STRELOAD 	= ((SYS_FREQ * period_ms)/1000) - 1;	/* Set reload val. */	
 	STCURRENT 	= 0; 									/* Reset counter. */
@@ -27,7 +33,7 @@ void SYSTICK_Init(uint32_t period_ms) {
 uint32_t xxx = 0;
 void SysTick_Handler(void) {
 	xxx += 1;
-	LL_Next(&g_main_thread_list);
+	LL_next(&g_main_thread_list);
 }
 */
 
