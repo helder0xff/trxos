@@ -29,10 +29,10 @@ struct TCB{
     uint32_t*   SP;
     /** Priority within the OS. */
     uint8_t     priority;
-    /** In the case of periodic threads, period in us. */
-    uint32_t    reload_time;
-    /** In the case of periodic threads, time from the last trigger. */
-    uint32_t    current_time;
+    /** In the case of periodic threads, period in OS ticks. */
+    uint32_t    reload_time_ticks;
+    /** In the case of periodic threads, time in OS ticks from the last trigger. */
+    uint32_t    current_time_ticks;
     /** Pointer to the code (function) of this thread. */
     void(*thread)(void);
 };
@@ -46,7 +46,7 @@ struct TCB{
                                     * scheduller. */
 
 /* static vars go here.	*/
-/** Linked List for the main thread. */
+/** Linked List for the main threads. */
 LL_list_t g_main_thread_list        = { NULL,   /* head     */
                                         NULL,   /* current  */
                                         NULL,   /* tail     */
@@ -90,14 +90,14 @@ static void _Init_TCB_stack(uint32_t *SP, void(*PC)(void));
  * 
  * @param tcb_pt Pointer to the TCB.
  * @param SP Associated Stack Pointer.
- * @param period_ms Period IN THE CASE of a periodic thread.
+ * @param period_ticks Period IN THE CASE of a periodic thread in OS ticks.
  * @param priority Associated priority within the OS.
  * @param thread Pointer to the assciated function.
  * @return void.
  */ 
 static void _Init_TCB(  TCB_T *tcb_pt, 
                         uint32_t* SP, 
-                        uint32_t period_us, 
+                        uint32_t period_ticks, 
                         uint8_t priority,
                         void(*thread)(void));
 
@@ -114,7 +114,7 @@ static void _run_periodic_threads(void);
  * @param time_uS Time in uS.
  * @reutnr Number of OS ticks. 
  */
-static uint32_t _time_uS_2_OS_ticks(uint32_t time_uS);
+static uint32_t _time_uS_to_OS_ticks(uint32_t time_uS);
 
 /** 
  * @brief This function set the clock as fast as possible.
@@ -158,12 +158,16 @@ void TRXOS_Scheduler(void){
 static void _run_periodic_threads(void){
     void(*thread)(void) = NULL;
 
+    /* 
+     * Go through list decreasing the threads time counter. 
+     * If the thread time counter reach 0, run it.
+     */
     for(int i = LL_get_length(&g_periodic_thread_list); i > 0; i--){
-        TCB_T* current = (TCB_T*)LL_get_current(&g_periodic_thread_list);
-        current->current_time--;
-        if(0 == current->current_time){
-            current->current_time = current->reload_time;
-            thread = current->thread;
+        TCB_T* current_thread = (TCB_T*)LL_get_current(&g_periodic_thread_list);
+        current_thread->current_time_ticks--;
+        if(0 == current_thread->current_time_ticks){
+            current_thread->current_time_ticks = current_thread->reload_time_ticks;
+            thread = current_thread->thread;
             thread();
         }
         LL_next(&g_periodic_thread_list);
@@ -182,6 +186,10 @@ void TRXOS_add_main_thread(void(*thread)(void), uint8_t priority) {
                 0, 
                 priority,
                 NULL);
+    /* 
+     * Check if the length in the if should be just the lenght of the 
+     * g_main_thread_list ¡!
+     */
     if(0 == length){
         LL_init(&g_main_thread_list, (LL_node_t*)&_tcbs[0]);
         _runPt = (TCB_T*)LL_get_current(&g_main_thread_list);
@@ -201,9 +209,10 @@ void TRXOS_add_periodic_thread( void(*thread)(void),
 
     _Init_TCB(  &_tcbs[length], 
                 &_stacks[length][_STACK_SIZE - 16], 
-                _time_uS_2_OS_ticks(period_uS),
+                _time_uS_to_OS_ticks(period_uS),
                 priority,
                 thread);
+
     if(0 == LL_get_length(&g_periodic_thread_list)){
         LL_init(&g_periodic_thread_list, (LL_node_t*)&_tcbs[length]);
         //_runPt = (TCB_T*)LL_get_current(&g_periodic_thread_list);
@@ -235,17 +244,17 @@ static void _Init_TCB_stack(uint32_t *SP, void(*PC)(void)){
 
 static void _Init_TCB(  TCB_T *tcb_pt, 
                         uint32_t* SP, 
-                        uint32_t period_us, 
+                        uint32_t period_ticks, 
                         uint8_t priority,
                         void(*thread)(void)){
-    tcb_pt->SP              = SP;
-    tcb_pt->reload_time  = period_us;
-    tcb_pt->current_time    = tcb_pt->reload_time;
-    tcb_pt->priority        = priority;
-    tcb_pt->thread          = thread;
+    tcb_pt->SP                  = SP;
+    tcb_pt->reload_time_ticks  = period_ticks;
+    tcb_pt->current_time_ticks = tcb_pt->reload_time_ticks;
+    tcb_pt->priority            = priority;
+    tcb_pt->thread              = thread;
 }
 
-static uint32_t _time_uS_2_OS_ticks(uint32_t time_uS){
+static uint32_t _time_uS_to_OS_ticks(uint32_t time_uS){
     return time_uS / _PERIOD_uS;
 }
 
