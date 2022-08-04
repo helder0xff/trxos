@@ -29,8 +29,8 @@ struct TCB{
     uint32_t*   SP;
     /** Priority within the OS. */
     uint8_t     priority;
-    /** In the case of periodic threads, period in ms. */
-    uint32_t    reload_time_ms;
+    /** In the case of periodic threads, period in us. */
+    uint32_t    reload_time;
     /** In the case of periodic threads, time from the last trigger. */
     uint32_t    current_time;
     /** Pointer to the code (function) of this thread. */
@@ -42,7 +42,8 @@ struct TCB{
 /* #defines go here.	*/
 #define _NUMBER_OF_THREADS   10
 #define _STACK_SIZE          100
-#define _FREQ_MS             1
+#define _PERIOD_uS           10000 /* Period in uS at wich we trigger the
+                                    * scheduller. */
 
 /* static vars go here.	*/
 /** Linked List for the main thread. */
@@ -63,6 +64,9 @@ TCB_T _tcbs[_NUMBER_OF_THREADS];
 uint32_t _stacks[_NUMBER_OF_THREADS][_STACK_SIZE];
 /** Current running thread. */
 TCB_T *_runPt;
+
+/** System clock. */
+uint32_t system_clk_Hz = 3000000;
 
 /* static function declarations go here.	*/
 /**
@@ -89,7 +93,7 @@ static void _Init_TCB_stack(uint32_t *SP, void(*PC)(void));
  */ 
 static void _Init_TCB(  TCB_T *tcb_pt, 
                         uint32_t* SP, 
-                        uint32_t period_ms, 
+                        uint32_t period_us, 
                         uint8_t priority,
                         void(*thread)(void));
 
@@ -108,7 +112,8 @@ static void _run_periodic_threads(void);
 void TRXOS_start_OS(void);
 
 void TRXOS_start(void) {
-    SYSTICK_init(_FREQ_MS);
+    _set_fastest_clk();
+    SYSTICK_init(_PERIOD_uS);
     TRXOS_start_OS();
 }
 
@@ -135,7 +140,7 @@ static void _run_periodic_threads(void){
         TCB_T* current = (TCB_T*)LL_get_current(&g_periodic_thread_list);
         current->current_time--;
         if(0 == current->current_time){
-            current->current_time = current->reload_time_ms;
+            current->current_time = current->reload_time;
             thread = current->thread;
             thread();
         }
@@ -165,7 +170,7 @@ void TRXOS_add_main_thread(void(*thread)(void), uint8_t priority) {
 }
 
 void TRXOS_add_periodic_thread( void(*thread)(void), 
-                                uint32_t period_ms, 
+                                uint32_t period_uS, 
                                 uint8_t priority){
     assert(NULL != thread);
 
@@ -208,12 +213,12 @@ static void _Init_TCB_stack(uint32_t *SP, void(*PC)(void)){
 
 static void _Init_TCB(  TCB_T *tcb_pt, 
                         uint32_t* SP, 
-                        uint32_t period_ms, 
+                        uint32_t period_us, 
                         uint8_t priority,
                         void(*thread)(void)){
     tcb_pt->SP              = SP;
-    tcb_pt->reload_time_ms  = period_ms;
-    tcb_pt->current_time    = tcb_pt->reload_time_ms;
+    tcb_pt->reload_time  = period_us;
+    tcb_pt->current_time    = tcb_pt->reload_time;
     tcb_pt->priority        = priority;
     tcb_pt->thread          = thread;
 }

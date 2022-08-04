@@ -36,11 +36,11 @@ int main( void ) {
 
     //TRXOS_test();
     TRXOS_add_main_thread(&main_thread_0, 0);
-    TRXOS_add_periodic_thread(&periodic_thread_0, 1000, 0);
-    TRXOS_add_periodic_thread(&periodic_thread_1, 60000, 0);    
+    TRXOS_add_periodic_thread(&periodic_thread_0, 1000000, 0);
+    TRXOS_add_periodic_thread(&periodic_thread_1, 60000000, 0);    
     TRXOS_add_main_thread(&main_thread_1, 0);
     TRXOS_add_main_thread(&main_thread_2, 0);
-    TRXOS_add_periodic_thread(&periodic_thread_2, 3600000, 0);
+    TRXOS_add_periodic_thread(&periodic_thread_2, 3600000000, 0);
     TRXOS_start();
 
     while(0 == 0) {

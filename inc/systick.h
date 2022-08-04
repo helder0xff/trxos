@@ -15,10 +15,10 @@
  * This function intialize the systick with a given frecuency.
  * Then it trigger it.
  * 
- * @param frequency Frequency at which the SysTick will be triggered.
+ * @param period_uS Period at which the SysTick will be triggered.
  * @return void.
  */ 
-void SYSTICK_init(uint32_t frequency);
+void SYSTICK_init(uint32_t period_uS);
 
 #endif
 

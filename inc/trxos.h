@@ -36,7 +36,7 @@ void TRXOS_add_main_thread(void(*thread)(void), uint8_t priority);
  * @return void
  */ 
 void TRXOS_add_periodic_thread( void(*thread)(void), 
-                                uint32_t period_ms, 
+                                uint32_t period_uS, 
                                 uint8_t priority);
 
 #endif /* TRXOS_H */
