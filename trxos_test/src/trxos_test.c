@@ -10,6 +10,7 @@
 #include <trxos.h>
 #include <msp432p401r.h>
 #include <CortexM.h>
+#include <BSP.h>
 
 /* typedefs go here.	*/
 
@@ -28,7 +29,15 @@ static void periodic_thread_0(void);
 static void periodic_thread_1(void);
 static void periodic_thread_2(void);
 
-int main( void ) {
+int main( void ) {    
+    BSP_LCD_Init();
+    BSP_LCD_FillScreen(BSP_LCD_Color565(0, 0, 0));
+    BSP_LCD_SetCursor(1, 1);
+    BSP_LCD_OutUDec(0, BSP_LCD_Color565(0, 255, 0));
+    BSP_LCD_SetCursor(1, 3);
+    BSP_LCD_OutUDec(0, BSP_LCD_Color565(0, 255, 0));
+    BSP_LCD_SetCursor(1, 5);
+    BSP_LCD_OutUDec(0, BSP_LCD_Color565(0, 255, 0));              
 
     for(int i = 0; i < 10; i++) {
         isAlive();
@@ -98,6 +107,8 @@ static void periodic_thread_0(void){
     if(periodic_thread_0_cnt >= 60){
         periodic_thread_0_cnt = 0;
     }
+    BSP_LCD_SetCursor(1, 1);
+    BSP_LCD_OutUDec(1000 + periodic_thread_0_cnt, BSP_LCD_Color565(0, 255, 0));    
 }
 
 uint32_t periodic_thread_1_cnt = 0;
@@ -105,15 +116,19 @@ static void periodic_thread_1(void){
     periodic_thread_1_cnt++;
     if(periodic_thread_1_cnt >= 60){
         periodic_thread_1_cnt = 0;
-    }    
+    }
+    BSP_LCD_SetCursor(1, 3);
+    BSP_LCD_OutUDec(1000 + periodic_thread_1_cnt, BSP_LCD_Color565(0, 255, 0));    
 }
 
 uint32_t periodic_thread_2_cnt = 0;
-static void periodic_thread_2(void){
+static void periodic_thread_2(void){ 
     periodic_thread_2_cnt++;
     if(periodic_thread_2_cnt >= 24){
         periodic_thread_2_cnt = 0;
-    }    
+    }
+    BSP_LCD_SetCursor(1, 5);
+    BSP_LCD_OutUDec(1000 + periodic_thread_2_cnt, BSP_LCD_Color565(0, 255, 0));    
 }
 
 /**** end of file ****/
