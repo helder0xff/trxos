@@ -105,6 +105,12 @@ static void _Init_TCB(  TCB_T *tcb_pt,
 static void _run_periodic_threads(void);
 
 /**
+ * @brief This function converts uS into OS ticks.
+ * 
+ * @param time_uS Time in uS.
+ * @reutnr Number of OS ticks. 
+ */
+static uint32_t _time_uS_2_OS_ticks(uint32_t time_uS);
  * @brief Boot Up OS and triggers it.
  * 
  * @return void.
@@ -179,7 +185,7 @@ void TRXOS_add_periodic_thread( void(*thread)(void),
 
     _Init_TCB(  &_tcbs[length], 
                 &_stacks[length][_STACK_SIZE - 16], 
-                period_ms,
+                _time_uS_2_OS_ticks(period_uS),
                 priority,
                 thread);
     if(0 == LL_get_length(&g_periodic_thread_list)){
