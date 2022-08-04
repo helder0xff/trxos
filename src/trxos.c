@@ -52,16 +52,20 @@ LL_list_t g_main_thread_list        = { NULL,   /* head     */
                                         NULL,   /* tail     */
                                         0,      /* length   */
                                         0};     /* id_cnt   */
+
 /** Linked list for the periodic threads. */
 LL_list_t g_periodic_thread_list    = { NULL,   /* head     */
                                         NULL,   /* current  */
                                         NULL,   /* tail     */
                                         0,      /* length   */
                                         0};     /* id_cnt   */
+
 /** Local variable holding the TCBs of the threads. */                                        
 TCB_T _tcbs[_NUMBER_OF_THREADS];
+
 /** Allocating memory for the threads stacks. */
 uint32_t _stacks[_NUMBER_OF_THREADS][_STACK_SIZE];
+
 /** Current running thread. */
 TCB_T *_runPt;
 

@@ -5,9 +5,6 @@
  */
 
 #include <systick.h>
-#include <ll.h>
-
-extern LL_list_t g_main_thread_list;
 
 extern uint32_t system_clk_Hz;
 
