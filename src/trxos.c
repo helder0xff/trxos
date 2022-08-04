@@ -115,6 +115,18 @@ static void _run_periodic_threads(void);
  * @reutnr Number of OS ticks. 
  */
 static uint32_t _time_uS_2_OS_ticks(uint32_t time_uS);
+
+/** 
+ * @brief This function set the clock as fast as possible.
+ * 
+ * It is a straight copy from the Valmaro BSP library function
+ * BSP_Clock_InitFastest.
+ */
+static void _set_fastest_clk(void);
+
+
+
+/**
  * @brief Boot Up OS and triggers it.
  * 
  * @return void.
@@ -232,4 +244,101 @@ static void _Init_TCB(  TCB_T *tcb_pt,
     tcb_pt->priority        = priority;
     tcb_pt->thread          = thread;
 }
+
+static uint32_t _time_uS_2_OS_ticks(uint32_t time_uS){
+    return time_uS / _PERIOD_uS;
+}
+
+#define MSP432P401R
+#ifdef MSP432P401R
+#define PCMCTL1                     (*((volatile uint32_t *)0x40010004))
+#define PCMCTL0                     (*((volatile uint32_t *)0x40010000))
+#define PCMIFG                      (*((volatile uint32_t *)0x4001000C))
+#define PCMCLRIFG                   (*((volatile uint32_t *)0x40010010))
+#define PJSEL0                      (*((volatile uint16_t *)0x40004D2A))
+#define PJSEL1                      (*((volatile uint16_t *)0x40004D2C))
+#define CSKEY                       (*((volatile uint32_t *)0x40010400))
+#define CSCTL1                      (*((volatile uint32_t *)0x40010408))
+#define CSCTL2                      (*((volatile uint32_t *)0x4001040C))
+#define FLCTL_BANK0_RDCTL           (*((volatile uint32_t *)0x40011010))
+#define FLCTL_BANK1_RDCTL           (*((volatile uint32_t *)0x40011014))
+#define CSIFG                       (*((volatile uint32_t *)0x40010448))
+#define CSCLRIFG                    (*((volatile uint32_t *)0x40010450))
+#define FLCTL_BANK0_RDCTL_WAIT_2    ((uint32_t)0x00002000)
+#define FLCTL_BANK1_RDCTL_WAIT_2    ((uint32_t)0x00002000)
+#endif
+
+uint32_t SYSTICK_Prewait = 0;                   // loops between BSP_Clock_InitFastest() called and PCM idle (expect 0)
+uint32_t SYSTICK_CPMwait = 0;                   // loops between Power Active Mode Request and Current Power Mode matching requested mode (expect small)
+uint32_t SYSTICK_Postwait = 0;                  // loops between Current Power Mode matching requested mode and PCM module idle (expect about 0)
+uint32_t SYSTICK_IFlags = 0;                    // non-zero if transition is invalid
+uint32_t SYSTICK_Crystalstable = 0;             // loops before the crystal stabilizes (expect small)
+void _set_fastest_clk(void){
+  // wait for the PCMCTL0 and Clock System to be write-able by waiting for Power Control Manager to be idle
+  while(PCMCTL1&0x00000100){
+    SYSTICK_Crystalstable = SYSTICK_Crystalstable + 1;
+    if(SYSTICK_Crystalstable >= 100000){
+      return;                           // time out error
+    }
+  }
+  // request power active mode LDO VCORE1 to support the 48 MHz frequency
+  PCMCTL0 = (PCMCTL0&~0xFFFF000F) |     // clear PCMKEY bit field and AMR bit field
+            0x695A0000 |                // write the proper PCM key to unlock write access
+            0x00000001;                 // request power active mode LDO VCORE1
+  // check if the transition is invalid (see Figure 7-3 on p344 of datasheet)
+  if(PCMIFG&0x00000004){
+    SYSTICK_IFlags = PCMIFG;                    // bit 2 set on active mode transition invalid; bits 1-0 are for LPM-related errors; bit 6 is for DC-DC-related error
+    PCMCLRIFG = 0x00000004;             // clear the transition invalid flag
+    // to do: look at CPM bit field in PCMCTL0, figure out what mode you're in, and step through the chart to transition to the mode you want
+    // or be lazy and do nothing; this should work out of reset at least, but it WILL NOT work if Clock_Int32kHz() or Clock_InitLowPower() has been called
+    return;
+  }
+  // wait for the CPM (Current Power Mode) bit field to reflect a change to active mode LDO VCORE1
+  while((PCMCTL0&0x00003F00) != 0x00000100){
+    SYSTICK_CPMwait = SYSTICK_CPMwait + 1;
+    if(SYSTICK_CPMwait >= 500000){
+      return;                           // time out error
+    }
+  }
+  // wait for the PCMCTL0 and Clock System to be write-able by waiting for Power Control Manager to be idle
+  while(PCMCTL1&0x00000100){
+    SYSTICK_Postwait = SYSTICK_Postwait + 1;
+    if(SYSTICK_Postwait >= 100000){
+      return;                           // time out error
+    }
+  }
+  // initialize PJ.3 and PJ.2 and make them HFXT (PJ.3 built-in 48 MHz crystal out; PJ.2 built-in 48 MHz crystal in)
+  PJSEL0 |= 0x0C;
+  PJSEL1 &= ~0x0C;                      // configure built-in 48 MHz crystal for HFXT operation
+//  PJDIR |= 0x08;                        // make PJ.3 HFXTOUT (unnecessary)
+//  PJDIR &= ~0x04;                       // make PJ.2 HFXTIN (unnecessary)
+  CSKEY = 0x695A;                       // unlock CS module for register access
+  CSCTL2 = (CSCTL2&~0x00700000) |       // clear HFXTFREQ bit field
+           0x00600000 |                 // configure for 48 MHz external crystal
+           0x00010000 |                 // HFXT oscillator drive selection for crystals >4 MHz
+           0x01000000;                  // enable HFXT
+  CSCTL2 &= ~0x02000000;                // disable high-frequency crystal bypass
+  // wait for the HFXT clock to stabilize
+  while(CSIFG&0x00000002){
+    CSCLRIFG = 0x00000002;              // clear the HFXT oscillator interrupt flag
+    SYSTICK_Crystalstable = SYSTICK_Crystalstable + 1;
+    if(SYSTICK_Crystalstable > 100000){
+      return;                           // time out error
+    }
+  }
+  // configure for 2 wait states (minimum for 48 MHz operation) for flash Bank 0
+  FLCTL_BANK0_RDCTL = (FLCTL_BANK0_RDCTL&~0x0000F000)|FLCTL_BANK0_RDCTL_WAIT_2;
+  // configure for 2 wait states (minimum for 48 MHz operation) for flash Bank 1
+  FLCTL_BANK1_RDCTL = (FLCTL_BANK1_RDCTL&~0x0000F000)|FLCTL_BANK1_RDCTL_WAIT_2;
+  CSCTL1 = 0x20000000 |                 // configure for SMCLK divider /4
+           0x00100000 |                 // configure for HSMCLK divider /2
+           0x00000200 |                 // configure for ACLK sourced from REFOCLK
+           0x00000050 |                 // configure for SMCLK and HSMCLK sourced from HFXTCLK
+           0x00000005;                  // configure for MCLK sourced from HFXTCLK
+  CSKEY = 0;                            // lock CS module from unintended access
+  //ClockFrequency = 48000000;
+  //SubsystemFrequency = 12000000;
+  system_clk_Hz = 48000000;
+}
+
 /* end of file */
