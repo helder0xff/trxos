@@ -256,6 +256,13 @@ static void _Init_TCB(  TCB_T *tcb_pt,
 
 static uint32_t _time_uS_to_OS_ticks(uint32_t time_uS){
     return time_uS / _PERIOD_uS;
+
+void TRXOS_enable_interrupts(void){
+    __asm("CPSIE  I");
+}
+
+void TRXOS_disable_interrupts(void){
+    __asm("CPSID  I");
 }
 
 #define MSP432P401R

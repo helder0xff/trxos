@@ -39,6 +39,21 @@ void TRXOS_add_periodic_thread( void(*thread)(void),
                                 uint32_t period_uS, 
                                 uint8_t priority);
 
+
+/**
+ * @brief Enable interrupts..
+ * 
+ * @return void
+ */ 
+void TRXOS_enable_interrupts(void);
+
+/**
+ * @brief Disable interrupts..
+ * 
+ * @return void
+ */ 
+void TRXOS_disable_interrupts(void);
+
 #endif /* TRXOS_H */
 
 /* end of file */
