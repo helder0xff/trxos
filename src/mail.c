@@ -35,11 +35,13 @@ int8_t MAIL_read(MAIL_box_t* mail_box, int32_t* message) {
 	assert(NULL != message);
 	int8_t ret = MAIL_NOT_READ;
 
+	SEMAPHORE_wait(&mail_box->semaphore);
 	if(MAIL_NOT_EMPTY == mail_box->state) {
 		*message = mail_box->message;
 		mail_box->state = MAIL_EMPTY;
 		ret = MAIL_READ;
 	}
+	SEMAPHORE_signal(&mail_box->semaphore);
 
 	return ret;
 }
@@ -48,4 +50,5 @@ void MAIL_empty(MAIL_box_t* mail_box) {
 	assert(NULL != mail_box);
 
 	mail_box->state = MAIL_EMPTY;
+	SEMAPHORE_init(&mail_box->semaphore, 1);
 }
