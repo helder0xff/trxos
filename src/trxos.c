@@ -11,6 +11,7 @@
 #include <systick.h>
 #include <stddef.h>
 #include <assert.h>
+#include <CortexM.h>
 
 /* typedefs go here.	*/
 
