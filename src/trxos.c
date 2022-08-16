@@ -133,6 +133,7 @@ static uint32_t _time_uS_to_OS_ticks(uint32_t time_uS);
 static void _set_fastest_clk(void);
 
 
+static void _main_dummy_thread(void);
 
 /**
  * @brief Boot Up OS and triggers it.
@@ -142,6 +143,7 @@ static void _set_fastest_clk(void);
 void TRXOS_start_OS(void);
 
 void TRXOS_start(void) {
+    TRXOS_add_main_thread(&_main_dummy_thread, 0);
     _set_fastest_clk();
     SYSTICK_init(_PERIOD_uS);
     TRXOS_start_OS();
@@ -272,6 +274,12 @@ static void _Init_TCB(  TCB_T *tcb_pt,
 
 static uint32_t _time_uS_to_OS_ticks(uint32_t time_uS){
     return time_uS / _PERIOD_uS;
+
+static void _main_dummy_thread(void){
+    while(0 == 0){
+        ;
+    }
+}
 
 void TRXOS_enable_interrupts(void){
     __asm("CPSIE  I");
