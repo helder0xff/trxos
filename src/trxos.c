@@ -190,12 +190,14 @@ static void _run_periodic_threads(void){
 void TRXOS_add_main_thread(void(*thread)(void), uint8_t priority) {
     assert(NULL != thread);
 
-    int32_t length =    LL_get_length(&g_main_thread_list) +
-                        LL_get_length(&g_periodic_thread_list);
+    int32_t main_thread_number      = LL_get_length(&g_main_thread_list);
+    int32_t periodic_thread_number  = LL_get_length(&g_periodic_thread_list);
+    int32_t total_thread_number     = main_thread_number +
+                                        periodic_thread_number;                        
 
-    _Init_TCB_stack(&_stacks[length][0], thread);
-    _Init_TCB(  &_tcbs[length], 
-                &_stacks[length][_STACK_SIZE - 16], 
+    _Init_TCB_stack(&_stacks[total_thread_number][0], thread);
+    _Init_TCB(  &_tcbs[total_thread_number], 
+                &_stacks[total_thread_number][TRXOS_STACK_SIZE - 16], 
                 0, 
                 priority,
                 NULL);
@@ -203,12 +205,12 @@ void TRXOS_add_main_thread(void(*thread)(void), uint8_t priority) {
      * Check if the length in the if should be just the lenght of the 
      * g_main_thread_list ¡!
      */
-    if(0 == length){
-        LL_init(&g_main_thread_list, (LL_node_t*)&_tcbs[0]);
+    if(0 == main_thread_number){
+        LL_init(&g_main_thread_list, (LL_node_t*)&_tcbs[total_thread_number]);
         _runPt = (TCB_T*)LL_get_current(&g_main_thread_list);
     }
     else{
-        LL_add(&g_main_thread_list, (LL_node_t*)&_tcbs[length]);
+        LL_add(&g_main_thread_list, (LL_node_t*)&_tcbs[total_thread_number]);
     }
 }
 
@@ -217,21 +219,27 @@ void TRXOS_add_periodic_thread( void(*thread)(void),
                                 uint8_t priority){
     assert(NULL != thread);
 
-    int32_t length =    LL_get_length(&g_main_thread_list) +
-                        LL_get_length(&g_periodic_thread_list);
+    int32_t main_thread_number      = LL_get_length(&g_main_thread_list);
+    int32_t periodic_thread_number  = LL_get_length(&g_periodic_thread_list);
+    int32_t total_thread_number     = main_thread_number +
+                                        periodic_thread_number;
 
-    _Init_TCB(  &_tcbs[length], 
-                &_stacks[length][_STACK_SIZE - 16], 
+    _Init_TCB_stack(&_stacks[total_thread_number][0], thread);
+    _Init_TCB(  &_tcbs[total_thread_number], 
+                &_stacks[total_thread_number][TRXOS_STACK_SIZE - 16], 
                 _time_uS_to_OS_ticks(period_uS),
                 priority,
                 thread);
 
-    if(0 == LL_get_length(&g_periodic_thread_list)){
-        LL_init(&g_periodic_thread_list, (LL_node_t*)&_tcbs[length]);
-        //_runPt = (TCB_T*)LL_get_current(&g_periodic_thread_list);
+    if(0 == periodic_thread_number){
+        LL_init(
+            &g_periodic_thread_list, 
+            (LL_node_t*)&_tcbs[total_thread_number]);
     }
     else{
-        LL_add(&g_periodic_thread_list, (LL_node_t*)&_tcbs[length]);
+        LL_add(
+            &g_periodic_thread_list, 
+            (LL_node_t*)&_tcbs[total_thread_number]);
     }
 }
 
