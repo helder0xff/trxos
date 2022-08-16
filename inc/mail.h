@@ -8,6 +8,7 @@
 #define MAIL_H
 
 #include <stdint.h>
+#include <semaphore.h>
 
 #define MAIL_EMPTY      0
 #define MAIL_NOT_EMPTY -1
@@ -24,6 +25,8 @@ typedef struct MAIL_box {
     int32_t message;
     /** State of the mail box: EMPTY, SENT, READ. */
     int8_t  state;
+    /** Semaphore for resource management. */
+    SEMAPHORE_semaphore_t semaphore;
 } MAIL_box_t;
 
 /**
