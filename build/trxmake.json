@@ -1,5 +1,5 @@
 {
 	"name": "trxos",
-	"modules" : [ ],
+	"modules" : ["/mnt/workspace/TRX/trxos/lib/CortexM"],
 	"defines" : [ ]
 }
