@@ -41,9 +41,9 @@ struct TCB{
 /* Consts go here.	*/
 
 /* #defines go here.	*/
-#define _NUMBER_OF_THREADS   10
-#define _STACK_SIZE          100
-#define _PERIOD_uS           10000 /* Period in uS at wich we trigger the
+#define TRXOS_NUMBER_OF_THREADS   10
+#define TRXOS_STACK_SIZE          100
+#define TRXOS_PERIOD_uS           10000 /* Period in uS at wich we trigger the
                                     * scheduller. */
 
 /* static vars go here.	*/
@@ -62,10 +62,10 @@ LL_list_t g_periodic_thread_list    = { NULL,   /* head     */
                                         0};     /* id_cnt   */
 
 /** Local variable holding the TCBs of the threads. */                                        
-TCB_T _tcbs[_NUMBER_OF_THREADS];
+TCB_T _tcbs[TRXOS_NUMBER_OF_THREADS];
 
 /** Allocating memory for the threads stacks. */
-uint32_t _stacks[_NUMBER_OF_THREADS][_STACK_SIZE];
+uint32_t _stacks[TRXOS_NUMBER_OF_THREADS][TRXOS_STACK_SIZE];
 
 /** Current running thread. */
 TCB_T *_runPt;
@@ -79,7 +79,7 @@ TCB_T *_runPt;
 uint8_t _suspend_flag = 0;
 
 /** System clock. */
-uint32_t system_clk_Hz = 3000000;
+uint32_t g_system_clk_Hz = 3000000;
 
 /* static function declarations go here.	*/
 /**
@@ -146,7 +146,7 @@ void TRXOS_start_OS(void);
 void TRXOS_start(void) {
     TRXOS_add_main_thread(&_main_dummy_thread, 0);
     _set_fastest_clk();
-    SYSTICK_init(_PERIOD_uS);
+    SYSTICK_init(TRXOS_PERIOD_uS);
     TRXOS_start_OS();
 }
 
@@ -154,7 +154,7 @@ void TRXOS_start(void) {
  * @brief High-Level part of the OS scheduler.
  * 
  * This function is part of the SysTick_handler.
- * To ease part of the scheduling part of the context swithc is done in C here.
+ * To ease part of the scheduling part of the context switch is done in C here.
  *
  * This function triggers the next periodic thread if needed.
  * If no periodic thread is due to run, next main thread is selected to run.
@@ -251,22 +251,22 @@ void TRXOS_suspend(void){
 
 /* static function implementation go here.	*/
 static void _Init_TCB_stack(uint32_t *SP, void(*PC)(void)){
-    SP[_STACK_SIZE - 1] = 0x01000000;       /* PSR: set T-bit. */
-    SP[_STACK_SIZE - 2] = (uint32_t)PC;     /* PC   */
-    /* SP[_STACK_SIZE - 3] -> R14    */
-    /* SP[_STACK_SIZE - 4] -> R12    */
-    /* SP[_STACK_SIZE - 5] -> R3     */
-    /* SP[_STACK_SIZE - 6] -> R2     */
-    /* SP[_STACK_SIZE - 7] -> R1     */
-    /* SP[_STACK_SIZE - 8] -> R0     */
-    /* SP[_STACK_SIZE - 9] -> R11    */
-    /* SP[_STACK_SIZE - 10] -> R10   */
-    /* SP[_STACK_SIZE - 11] -> R9    */
-    /* SP[_STACK_SIZE - 12] -> R8    */
-    /* SP[_STACK_SIZE - 13] -> R7    */
-    /* SP[_STACK_SIZE - 14] -> R6    */
-    /* SP[_STACK_SIZE - 15] -> R5    */
-    /* SP[_STACK_SIZE - 16] -> R4    */
+    SP[TRXOS_STACK_SIZE - 1] = 0x01000000;       /* PSR: set T-bit. */
+    SP[TRXOS_STACK_SIZE - 2] = (uint32_t)PC;     /* PC   */
+    /* SP[TRXOS_STACK_SIZE - 3] -> R14    */
+    /* SP[TRXOS_STACK_SIZE - 4] -> R12    */
+    /* SP[TRXOS_STACK_SIZE - 5] -> R3     */
+    /* SP[TRXOS_STACK_SIZE - 6] -> R2     */
+    /* SP[TRXOS_STACK_SIZE - 7] -> R1     */
+    /* SP[TRXOS_STACK_SIZE - 8] -> R0     */
+    /* SP[TRXOS_STACK_SIZE - 9] -> R11    */
+    /* SP[TRXOS_STACK_SIZE - 10] -> R10   */
+    /* SP[TRXOS_STACK_SIZE - 11] -> R9    */
+    /* SP[TRXOS_STACK_SIZE - 12] -> R8    */
+    /* SP[TRXOS_STACK_SIZE - 13] -> R7    */
+    /* SP[TRXOS_STACK_SIZE - 14] -> R6    */
+    /* SP[TRXOS_STACK_SIZE - 15] -> R5    */
+    /* SP[TRXOS_STACK_SIZE - 16] -> R4    */
 }
 
 static void _Init_TCB(  TCB_T *tcb_pt, 
@@ -282,7 +282,8 @@ static void _Init_TCB(  TCB_T *tcb_pt,
 }
 
 static uint32_t _time_uS_to_OS_ticks(uint32_t time_uS){
-    return time_uS / _PERIOD_uS;
+    return time_uS / TRXOS_PERIOD_uS;
+}
 
 static void _main_dummy_thread(void){
     while(0 == 0){
@@ -298,6 +299,7 @@ void TRXOS_disable_interrupts(void){
     __asm("CPSID  I");
 }
 
+/* This is a copy paste from another code. To be updated. */
 #define MSP432P401R
 #ifdef MSP432P401R
 #define PCMCTL1                     (*((volatile uint32_t *)0x40010004))
@@ -387,7 +389,7 @@ void _set_fastest_clk(void){
   CSKEY = 0;                            // lock CS module from unintended access
   //ClockFrequency = 48000000;
   //SubsystemFrequency = 12000000;
-  system_clk_Hz = 48000000;
+  g_system_clk_Hz = 48000000;
 }
 
 /* end of file */
