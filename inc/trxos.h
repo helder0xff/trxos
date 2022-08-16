@@ -39,6 +39,16 @@ void TRXOS_add_periodic_thread( void(*thread)(void),
                                 uint32_t period_uS, 
                                 uint8_t priority);
 
+/**
+ * @brief Suspend current thread.
+ * 
+ * This function suspend the current thread and force a SysTick interrupt.
+ * In order not to reenter a periodic thread, a flag is set therefore we 
+ * do not corrupt timing.
+ * 
+ * @return void
+ */ 
+void TRXOS_suspend(void);
 
 /**
  * @brief Enable interrupts..

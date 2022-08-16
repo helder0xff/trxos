@@ -69,6 +69,14 @@ uint32_t _stacks[_NUMBER_OF_THREADS][_STACK_SIZE];
 /** Current running thread. */
 TCB_T *_runPt;
 
+/** 
+ *  This variable informs about an OS suspend command.
+ *  It is used to only allow main threads to be triggered when the SysTick is
+ *  being interrupted by SW (OS_suspend).
+ *  This trick will keep the timing right.
+ */
+uint8_t _suspend_flag = 0;
+
 /** System clock. */
 uint32_t system_clk_Hz = 3000000;
 
@@ -151,7 +159,10 @@ void TRXOS_start(void) {
  * @return void.
  */
 void TRXOS_Scheduler(void){
-    _run_periodic_threads();
+    if(0 == _suspend_flag){
+        _run_periodic_threads();
+    }
+    _suspend_flag = 0;
     LL_next(&g_main_thread_list);
 }
 
@@ -220,6 +231,11 @@ void TRXOS_add_periodic_thread( void(*thread)(void),
     else{
         LL_add(&g_periodic_thread_list, (LL_node_t*)&_tcbs[length]);
     }
+}
+
+void TRXOS_suspend(void){
+    _suspend_flag = 1;
+    INTCTRL = 0x04000000; // trigger SysTick
 }
 
 /* static function implementation go here.	*/
