@@ -111,6 +111,10 @@ LL_node_t* LL_next(LL_list_t* list) {
     return list->current;
  }
 
+LL_node_t* LL_get_head(LL_list_t* list){
+    return list->head;
+}
+
 /* static function implementation go here.	*/
 
 /* end of file */

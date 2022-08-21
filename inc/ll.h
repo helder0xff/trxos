@@ -100,6 +100,14 @@ int32_t LL_get_length(LL_list_t* list);
  */
 LL_node_t* LL_get_current(LL_list_t* list);
 
+/**
+ * @brief Get head node of the LL.
+ * 
+ * @param list Pointer to the LL.
+ * @return Pointer to the head node.
+ */
+LL_node_t* LL_get_head(LL_list_t* list);
+
 #endif /* TRXOS_H */
 
 /* end of file */
