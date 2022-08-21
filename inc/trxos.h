@@ -8,6 +8,27 @@
 #define TRXOS_H
 
 #include <stdint.h>
+#include <ll.h>
+
+/**
+ * @brief Trhead Control Block structure.
+ * 
+ * The TCB forms part of a linked list. To do so, we use the LL module.
+ * The first element of the TCB must be a LL_node_t in order to get track of
+ * it.
+ */
+typedef struct TCB TCB_T;
+struct TCB{
+    /** Node structure to get the TCB on a linked list.*/
+    LL_node_t   node;
+    /** Stack Pointer of the TCB. */
+    uint32_t*   SP;
+    /** Priority within the OS. */
+    uint8_t     priority;
+    /** In the case of periodic threads, period in OS ticks. */
+    uint32_t    reload_time_ticks;
+    /** In the case of periodic threads, time in OS ticks from the last trigger. */
+    uint32_t    current_time_ticks;
 
 /**
  * @brief Initialization function.
