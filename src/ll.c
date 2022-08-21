@@ -115,6 +115,21 @@ LL_node_t* LL_get_head(LL_list_t* list){
     return list->head;
 }
 
+void LL_move_node_to_another_list(
+    LL_list_t* list_origin, 
+    LL_list_t* list_destination,
+    uint32_t id){
+
+    assert(NULL != list_origin);
+    assert(NULL != list_destination);
+    assert(0 <= id);
+
+    LL_node_t* node = LL_remove(list_origin, id);
+    if(NULL != node){
+        LL_add(list_destination, node);
+    }
+}
+
 /* static function implementation go here.	*/
 
 /* end of file */

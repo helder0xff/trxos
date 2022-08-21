@@ -108,6 +108,19 @@ LL_node_t* LL_get_current(LL_list_t* list);
  */
 LL_node_t* LL_get_head(LL_list_t* list);
 
+/**
+ * @brief Move a node from one list to another..
+ * 
+ * @param list_origin Pointer to the origin LL.
+ * @param list_destination Pointer to the destination LL.
+ * @param id Node id.
+ * @return Pointer to the head node.
+ */
+void LL_move_node_to_another_list(
+    LL_list_t* list_origin, 
+    LL_list_t* list_destination,
+    uint32_t id);
+
 #endif /* TRXOS_H */
 
 /* end of file */
