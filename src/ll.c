@@ -100,7 +100,6 @@ LL_node_t* LL_next(LL_list_t* list) {
 
     /* Go through the LL searching for the node_id and remove it if found. */
     LL_node_t* cursor   = list->head;
-    LL_node_t* prev      = NULL;
     for(int i = 0; i < list->length; i++) {
         if(node_id == cursor->id) {
             list->length        -= 1;
