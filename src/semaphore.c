@@ -9,7 +9,6 @@
 
 void SEMAPHORE_wait(SEMAPHORE_semaphore_t* semaphore){
 	TRXOS_disable_interrupts();
-	while(SEMAPHORE_BUSY == semaphore->counter){
 		/* The OS will loop here waiting for the semaphore to be free. */
 		TRXOS_enable_interrupts();
 		TRXOS_suspend();

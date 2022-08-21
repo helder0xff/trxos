@@ -9,14 +9,12 @@
 
 #include <stdint.h>
 
-#define SEMAPHORE_BUSY  (0)
-
 /**
  * @brief Semaphore structure.
  */
 typedef struct SEMAPHORE_semaphore {
     /** Semaphore counter. */
-    uint8_t counter;
+    int8_t counter;
 } SEMAPHORE_semaphore_t;
 
 /**
