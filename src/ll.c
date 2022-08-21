@@ -22,22 +22,34 @@
 /* non static function implementation go here.	*/
 void LL_init(LL_list_t* list, LL_node_t* head) {
     assert(NULL != list);
-    assert(NULL != head);
 
-    /* Initialization of the LL. */
-    list->id_cnt        = 0;
-    list->head          = head;
-    list->current       = list->head;
-    list->tail          = list->current;
-    list->head->id      = list->id_cnt;
-    list->id_cnt        += 1;
-    list->length        = 1;
+    if(NULL == head){
+        list->head      = NULL;
+        list->current   = NULL;
+        list->tail      = NULL;
+        list->id_cnt    = 0;
+        list->length    = 0;
+    }
+    else{
+        /* Initialization of the LL. */
+        list->id_cnt        = 0;
+        list->head          = head;
+        list->current       = head;
+        list->tail          = head;
+        list->head->id      = list->id_cnt;
+        list->id_cnt        += 1;
+        list->length        = 1;
 
-    // Make it ciruclar.
-    list->head->next    = list->tail;
-    list->head->prev    = list->tail;
-    list->tail->next    = list->head;
-    list->tail->prev    = list->head;
+        // Make it ciruclar.
+        /*
+        list->head->next    = list->tail;
+        list->head->prev    = list->tail;
+        list->tail->next    = list->head;
+        list->tail->prev    = list->head;
+        */
+        head->next          = head;
+        head->prev          = head;
+    }
 }
 
 LL_node_t* LL_next(LL_list_t* list) {
@@ -54,18 +66,26 @@ LL_node_t* LL_next(LL_list_t* list) {
     assert(NULL != list);
     assert(NULL != node);
 
-    /* Link new node. */
-    node->next      = list->head;
-    node->prev      = list->tail;
-    node->id        = list->id_cnt;
-    list->id_cnt    += 1;
+    if(0 >= list->length){
+        LL_init(list, node);
+    }
+    else{
+        /* Link new node. */
+        node->next      = list->head;
+        node->prev      = list->tail;
+        node->id        = list->id_cnt;
+        list->id_cnt    += 1;
 
-    /* Update tail. */
-    list->tail->next    = node;
-    list->tail          = node;
+        /* Update head. */
+        list->head->prev    = node;
 
-    /* Update LL length. */
-    list->length        += 1;
+        /* Update tail. */
+        list->tail->next    = node;
+        list->tail          = node;
+
+        /* Update LL length. */
+        list->length        += 1;        
+    }    
  }
 
  void LL_init_node(LL_node_t* node, int32_t data) {
@@ -83,12 +103,29 @@ LL_node_t* LL_next(LL_list_t* list) {
     LL_node_t* prev      = NULL;
     for(int i = 0; i < list->length; i++) {
         if(node_id == cursor->id) {
-            if(node_id == list->current->id) {
-                list->current = list->current->next;
+            list->length        -= 1;
+            if(0 == list->length){
+                LL_init(list, NULL);
+                break;
             }
+
+            cursor->next->prev  = cursor->prev;
+            cursor->prev->next  = cursor->next;            
+            if(cursor == list->current) {
+                list->current = cursor->next;
+            }
+            if(cursor == list->head){
+                list->head = cursor->next;
+            }
+            if(cursor == list->tail){
+                list->tail = cursor->prev;
+            }
+
+            /*
             prev            = cursor->prev;
             prev->next       = cursor->next;
             list->length    -= 1;
+            */
             break;
         }
         else {
