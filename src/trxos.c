@@ -51,7 +51,7 @@ TCB_T *_runPt;
  *  being interrupted by SW (OS_suspend).
  *  This trick will keep the timing right.
  */
-uint8_t _suspend_flag = 0;
+uint8_t _suspend_flag   = 0;
 
 /** System clock. */
 uint32_t g_system_clk_Hz = 3000000;
@@ -82,7 +82,7 @@ static void _Init_TCB_stack(uint32_t *SP, void(*PC)(void));
 static void _Init_TCB(  TCB_T *tcb_pt, 
                         uint32_t* SP, 
                         uint32_t period_ticks, 
-                        uint8_t priority,
+                        uint8_t priority,                        
                         void(*thread)(void));
 
 /**
