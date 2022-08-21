@@ -40,11 +40,14 @@ void LL_init(LL_list_t* list, LL_node_t* head) {
     list->tail->prev    = list->head;
 }
 
-void LL_next(LL_list_t* list) {
+LL_node_t* LL_next(LL_list_t* list) {
     assert(NULL != list);
-    assert(NULL != list->current->next);
 
-    list->current = list->current->next;
+    if(0 < list->length){
+        list->current = list->current->next;
+    }
+
+    return list->current;
 }
  
  void LL_add(LL_list_t* list, LL_node_t* node) {

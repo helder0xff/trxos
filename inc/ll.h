@@ -53,9 +53,9 @@ void LL_init(LL_list_t* list, LL_node_t* head);
  * @brief Update the 'current' node to the next in the list.
  * 
  * @param list Pointer to linked list.
- * @return void
+ * @return Pointer to node to the updated current node.
  */
-void LL_next(LL_list_t* list);
+LL_node_t* LL_next(LL_list_t* list);
 
 /**
  * @brief Add a new node to the LL.
