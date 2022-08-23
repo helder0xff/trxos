@@ -36,6 +36,13 @@ LL_list_t g_periodic_thread_list    = { NULL,   /* head     */
                                         0,      /* length   */
                                         0};     /* id_cnt   */
 
+/** Linked list for the blocked threads. */
+LL_list_t g_blocked_thread_list     = { NULL,   /* head     */
+                                        NULL,   /* current  */
+                                        NULL,   /* tail     */
+                                        0,      /* length   */
+                                        0};     /* id_cnt   */
+
 /** Local variable holding the TCBs of the threads. */                                        
 TCB_T _tcbs[TRXOS_NUMBER_OF_THREADS];
 
@@ -52,6 +59,7 @@ TCB_T *_runPt;
  *  This trick will keep the timing right.
  */
 uint8_t _suspend_flag   = 0;
+static uint8_t _blocked_flag   = false;
 
 /** System clock. */
 uint32_t g_system_clk_Hz = 3000000;
@@ -119,6 +127,7 @@ static void _main_dummy_thread(void);
 void TRXOS_start_OS(void);
 
 void TRXOS_start(void) {
+    LL_init(&g_blocked_thread_list, NULL);
     TRXOS_add_main_thread(&_main_dummy_thread, 0);
     _set_fastest_clk();
     SYSTICK_init(TRXOS_PERIOD_uS);
@@ -137,7 +146,22 @@ void TRXOS_start(void) {
  * @return void.
  */
 void TRXOS_Scheduler(void){
-    if(0 == _suspend_flag){
+    if(true == _blocked_flag){
+        LL_node_t *node = LL_get_head(&g_main_thread_list);
+        TCB_T* thread   = (TCB_T*)node;
+        for(int i = 0; i < LL_get_length(&g_main_thread_list); i++){
+            if(NULL != thread->blocked){
+                LL_move_node_to_another_list(
+                    &g_main_thread_list, 
+                    &g_blocked_thread_list,
+                    thread->node.id);
+                _blocked_flag = false;
+                break;
+            }
+            node = node->next;
+            thread = (TCB_T*)node;
+        }
+    }
         _run_periodic_threads();
     }
     _suspend_flag = 0;
@@ -254,6 +278,7 @@ static void _Init_TCB(  TCB_T *tcb_pt,
     tcb_pt->current_time_ticks = tcb_pt->reload_time_ticks;
     tcb_pt->priority            = priority;
     tcb_pt->thread              = thread;
+    tcb_pt->blocked             = NULL;
 }
 
 static uint32_t _time_uS_to_OS_ticks(uint32_t time_uS){
@@ -275,6 +300,27 @@ void TRXOS_disable_interrupts(void){
 }
 
 /* This is a copy paste from another code. To be updated. */
+void TRXOS_block(TCB_T* p_tcb, SEMAPHORE_semaphore_t* p_semaphore){
+        p_tcb->blocked  = p_semaphore;
+        _blocked_flag   = true;
+}
+
+void TRXOS_unblock(SEMAPHORE_semaphore_t* p_semaphore){
+
+    LL_node_t* node = LL_get_head(&g_blocked_thread_list);
+    TCB_T* thread   = (TCB_T*)node;
+    for(int i = 0; i < LL_get_length(&g_blocked_thread_list); i++){
+        if(p_semaphore == thread->blocked){
+            LL_move_node_to_another_list(
+                &g_blocked_thread_list,
+                &g_main_thread_list,
+                thread->node.id);
+            break;
+        }
+        node    = node->next;
+        thread  = (TCB_T*)node;
+    }
+}
 #define MSP432P401R
 #ifdef MSP432P401R
 #define PCMCTL1                     (*((volatile uint32_t *)0x40010004))
