@@ -29,6 +29,12 @@ struct TCB{
     uint32_t    reload_time_ticks;
     /** In the case of periodic threads, time in OS ticks from the last trigger. */
     uint32_t    current_time_ticks;
+    /** Pointer to the code (function) of this thread. */
+    void(*thread)(void);
+    /** Pointer to the semaphore whose is blocking the thread, NULL in case
+     * of no one is blocking it. */
+    SEMAPHORE_semaphore_t* blocked;
+};
 
 /**
  * @brief Initialization function.
@@ -84,6 +90,24 @@ void TRXOS_enable_interrupts(void);
  * @return void
  */ 
 void TRXOS_disable_interrupts(void);
+
+/**
+ * @brief Block the given thread with the given semaphore.
+ * 
+ * @param p_tcb Pointer to the thread TCB.
+ * @param p_semaphore Pointer to the semaphore.
+ * @return void
+ */ 
+void TRXOS_block(TCB_T* p_tcb, SEMAPHORE_semaphore_t* p_semaphore);
+
+/**
+ * @brief Unblock the first thread in the blocked_thread_list being
+ * blocked by the given semaphore.
+ * 
+ * @param p_semaphore Pointer to semaphore.
+ * @return void
+ */ 
+void TRXOS_unblock(SEMAPHORE_semaphore_t* p_semaphore);
 
 #endif /* TRXOS_H */
 
