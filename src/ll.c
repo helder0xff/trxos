@@ -62,7 +62,7 @@ LL_node_t* LL_next(LL_list_t* list) {
     return list->current;
 }
  
- void LL_add(LL_list_t* list, LL_node_t* node) {
+ void LL_add_to_tail(LL_list_t* list, LL_node_t* node) {
     assert(NULL != list);
     assert(NULL != node);
 
@@ -82,6 +82,32 @@ LL_node_t* LL_next(LL_list_t* list) {
         /* Update tail. */
         list->tail->next    = node;
         list->tail          = node;
+
+        /* Update LL length. */
+        list->length        += 1;        
+    }    
+ }
+
+ void LL_add_to_head(LL_list_t* list, LL_node_t* node) {
+    assert(NULL != list);
+    assert(NULL != node);
+
+    if(0 >= list->length){
+        LL_init(list, node);
+    }
+    else{
+        /* Link new node. */
+        node->next      = list->head;
+        node->prev      = list->tail;
+        node->id        = list->id_cnt;
+        list->id_cnt    += 1;
+
+        /* Update head. */
+        list->head->prev    = node;
+        list->head          = node;
+
+        /* Update tail. */
+        list->tail->next    = node;        
 
         /* Update LL length. */
         list->length        += 1;        
@@ -162,7 +188,7 @@ void LL_move_node_to_another_list(
 
     LL_node_t* node = LL_remove(list_origin, id);
     if(NULL != node){
-        LL_add(list_destination, node);
+        LL_add_to_tail(list_destination, node);
     }
 }
 

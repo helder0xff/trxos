@@ -58,14 +58,22 @@ void LL_init(LL_list_t* list, LL_node_t* head);
 LL_node_t* LL_next(LL_list_t* list);
 
 /**
- * @brief Add a new node to the LL.
+ * @brief Add a new node to the tail of the LL.
  * 
  * @param list Pointer to linked list.
  * @param node The new node, should be initialized first.
  * @return void.
  */
-void LL_add(LL_list_t* list, LL_node_t* node);
+void LL_add_to_tail(LL_list_t* list, LL_node_t* node);
 
+/**
+ * @brief Add a new node to the head of the LL.
+ * 
+ * @param list Pointer to linked list.
+ * @param node The new node, should be initialized first.
+ * @return void.
+ */
+void LL_add_to_head(LL_list_t* list, LL_node_t* node);
 /**
  * @brief Initialize node with the giving data.
  * 

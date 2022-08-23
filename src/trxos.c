@@ -186,7 +186,7 @@ void TRXOS_add_main_thread(void(*thread)(void), uint8_t priority) {
         _runPt = (TCB_T*)LL_get_current(&g_main_thread_list);
     }
     else{
-        LL_add(&g_main_thread_list, (LL_node_t*)&_tcbs[total_thread_number]);
+        LL_add_to_tail(&g_main_thread_list, (LL_node_t*)&_tcbs[total_thread_number]);
     }
 }
 
@@ -213,7 +213,7 @@ void TRXOS_add_periodic_thread( void(*thread)(void),
             (LL_node_t*)&_tcbs[total_thread_number]);
     }
     else{
-        LL_add(
+        LL_add_to_tail(
             &g_periodic_thread_list, 
             (LL_node_t*)&_tcbs[total_thread_number]);
     }
