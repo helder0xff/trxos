@@ -29,8 +29,6 @@ SysTick_Handler:
     ldr     R0, =g_main_thread_list     @ R0 = &g_main_thread_list.
     ldr     R1, [R0, #4]                @ R1 = *g_main_thread_list.
     str     SP, [R1, #16]               @ Save SP.
-    @ldr    R1, [R1]        
-    @str    R1, [R0, #4]
     push    {R0, LR}                    @ Launch the scheduler which        ... 
     bl      TRXOS_Scheduler             @ ... wil make the switch to the    ... 
     pop     {R0, LR}                    @ ... new thread.

@@ -3,6 +3,7 @@
  * @author  helder
  * @brief   Semaphores source file.
  */
+#include <stdbool.h>
 #include <semaphore.h>
 #include <CortexM.h>
 #include <trxos.h>

@@ -9,6 +9,7 @@
 
 #include <stdint.h>
 #include <ll.h>
+#include <semaphore.h>
 
 /**
  * @brief Trhead Control Block structure.
@@ -27,7 +28,8 @@ struct TCB{
     uint8_t     priority;
     /** In the case of periodic threads, period in OS ticks. */
     uint32_t    reload_time_ticks;
-    /** In the case of periodic threads, time in OS ticks from the last trigger. */
+    /** In the case of periodic threads, time in OS ticks from the last 
+     * trigger. */
     uint32_t    current_time_ticks;
     /** Pointer to the code (function) of this thread. */
     void(*thread)(void);
@@ -78,14 +80,14 @@ void TRXOS_add_periodic_thread( void(*thread)(void),
 void TRXOS_suspend(void);
 
 /**
- * @brief Enable interrupts..
+ * @brief Enable interrupts.
  * 
  * @return void
  */ 
 void TRXOS_enable_interrupts(void);
 
 /**
- * @brief Disable interrupts..
+ * @brief Disable interrupts.
  * 
  * @return void
  */ 

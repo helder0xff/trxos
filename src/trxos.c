@@ -5,10 +5,11 @@
  */
 
 /* Includes go here.	*/
-#include <trxos.h>
-#include <systick.h>
 #include <stddef.h>
 #include <assert.h>
+#include <stdbool.h>
+#include <trxos.h>
+#include <systick.h>
 #include <CortexM.h>
 
 /* typedefs go here.	*/
@@ -58,7 +59,7 @@ TCB_T *_runPt;
  *  being interrupted by SW (OS_suspend).
  *  This trick will keep the timing right.
  */
-uint8_t _suspend_flag   = 0;
+static uint8_t _suspend_flag   = false;
 static uint8_t _blocked_flag   = false;
 
 /** System clock. */
@@ -117,6 +118,14 @@ static uint32_t _time_uS_to_OS_ticks(uint32_t time_uS);
 static void _set_fastest_clk(void);
 
 
+/** 
+ * @brief Dummy thread to keep the OS running.
+ * 
+ * This thread must never been removed. If the OS run out of main threads,
+ * it is over.
+ * 
+ * @return void.
+ */
 static void _main_dummy_thread(void);
 
 /**
@@ -162,9 +171,10 @@ void TRXOS_Scheduler(void){
             thread = (TCB_T*)node;
         }
     }
+    if(false == _suspend_flag){
         _run_periodic_threads();
     }
-    _suspend_flag = 0;
+    _suspend_flag = false;
     LL_next(&g_main_thread_list);
 }
 
@@ -244,7 +254,7 @@ void TRXOS_add_periodic_thread( void(*thread)(void),
 }
 
 void TRXOS_suspend(void){
-    _suspend_flag = 1;
+    _suspend_flag = true;
     INTCTRL = 0x04000000; // trigger SysTick
 }
 
@@ -299,7 +309,6 @@ void TRXOS_disable_interrupts(void){
     __asm("CPSID  I");
 }
 
-/* This is a copy paste from another code. To be updated. */
 void TRXOS_block(TCB_T* p_tcb, SEMAPHORE_semaphore_t* p_semaphore){
         p_tcb->blocked  = p_semaphore;
         _blocked_flag   = true;
@@ -321,6 +330,10 @@ void TRXOS_unblock(SEMAPHORE_semaphore_t* p_semaphore){
         thread  = (TCB_T*)node;
     }
 }
+
+/*******************************************************************************
+ * This is a copy paste from another code. To be updated.
+*******************************************************************************/
 #define MSP432P401R
 #ifdef MSP432P401R
 #define PCMCTL1                     (*((volatile uint32_t *)0x40010004))
