@@ -17,7 +17,6 @@ void SEMAPHORE_wait(SEMAPHORE_semaphore_t* semaphore){
 		TRXOS_enable_interrupts();
 		TRXOS_suspend();
 	}		
-	semaphore->counter--;
 	TRXOS_enable_interrupts();
 }
 
