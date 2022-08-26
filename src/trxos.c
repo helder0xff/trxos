@@ -324,6 +324,7 @@ void TRXOS_unblock(SEMAPHORE_semaphore_t* p_semaphore){
                 &g_blocked_thread_list,
                 &g_main_thread_list,
                 thread->node.id);
+            thread->blocked = NULL;
             break;
         }
         node    = node->next;
