@@ -22,7 +22,7 @@ void SEMAPHORE_wait(SEMAPHORE_semaphore_t* semaphore){
 
 void SEMAPHORE_signal(SEMAPHORE_semaphore_t* semaphore){
 	TRXOS_disable_interrupts();
-	if(0 >= semaphore->counter++){
+	if(0 >= ++semaphore->value){
 		TRXOS_unblock(semaphore);
 	}
 	TRXOS_enable_interrupts();
