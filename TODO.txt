@@ -8,6 +8,7 @@ TODO
 #5 Implement tests.
 	* 	There is main with LL unitary test ready to be integrated in a well 
 		designed test system at the root of this folder.
+#6 Review mail module.		
 
 DONE
 #1 LL: initialize linked list with no head.
