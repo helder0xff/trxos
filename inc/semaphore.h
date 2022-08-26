@@ -13,8 +13,8 @@
  * @brief Semaphore structure.
  */
 typedef struct SEMAPHORE_semaphore {
-    /** Semaphore counter. */
-    int8_t counter;
+    /** Semaphore value. */
+    int32_t value;
 } SEMAPHORE_semaphore_t;
 
 /**
@@ -23,7 +23,7 @@ typedef struct SEMAPHORE_semaphore {
  * @param semaphore Pointer to the semaphore.
  * @return void.
  */
-void SEMAPHORE_init(SEMAPHORE_semaphore_t* semaphore, uint8_t initial_counter);
+void SEMAPHORE_init(SEMAPHORE_semaphore_t* semaphore, int32_t initial_value);
 
 /**
  * @brief Initialization of a mutex.
@@ -48,6 +48,8 @@ void SEMAPHORE_wait(SEMAPHORE_semaphore_t* semaphore);
  * @return void.
  */
 void SEMAPHORE_signal(SEMAPHORE_semaphore_t* semaphore);
+
+int32_t SEMAPHORE_get_value(SEMAPHORE_semaphore_t* semaphore);
 
 #endif /* SEMAPHORE_H */
 
