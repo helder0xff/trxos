@@ -36,4 +36,8 @@ void SEMAPHORE_mutex_init(SEMAPHORE_semaphore_t* semaphore){
 	SEMAPHORE_init(semaphore, 1);
 }
 
+int32_t SEMAPHORE_get_value(SEMAPHORE_semaphore_t* semaphore){
+	return semaphore->value;
+}
+
 /* end of file */
