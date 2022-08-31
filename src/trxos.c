@@ -173,20 +173,12 @@ void TRXOS_start(void) {
  */
 void TRXOS_Scheduler(void){
     if(true == _blocked_flag){
-        LL_node_t *node = LL_get_head(&g_main_thread_list);
-        TCB_T* thread   = (TCB_T*)node;
-        for(int i = 0; i < LL_get_length(&g_main_thread_list); i++){
-            if(NULL != thread->blocked){
-                LL_move_node_to_another_list(
-                    &g_main_thread_list, 
-                    &g_blocked_thread_list,
-                    thread->node.id);
-                _blocked_flag = false;
-                break;
-            }
-            node = node->next;
-            thread = (TCB_T*)node;
-        }
+        LL_move_node_to_another_list(
+            &g_main_thread_list, 
+            &g_blocked_thread_list,
+            _runPt->node.id);
+        _blocked_flag = false;
+    }
     if(true == _sleep_flag){
         LL_move_node_to_another_list(
             &g_main_thread_list,
