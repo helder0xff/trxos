@@ -1,4 +1,6 @@
 TODO
+!! Empty
+
 #2 Standarize naming.
 #3 _set_fastest_clk:
 	Make this function more like a run time configuration of the OS so we
@@ -8,7 +10,9 @@ TODO
 #5 Implement tests.
 	* 	There is main with LL unitary test ready to be integrated in a well 
 		designed test system at the root of this folder.
-#6 Review mail module.		
+#6 Review mail module.
+#7 Use the _sleep_flag, _blocked_flag & _suspend_flag as threads ids, instead
+booleans. Might make the system more efficient.	
 
 DONE
 #1 LL: initialize linked list with no head.
