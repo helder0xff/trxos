@@ -335,25 +335,6 @@ void TRXOS_unblock(SEMAPHORE_semaphore_t* p_semaphore){
 /*******************************************************************************
  * This is a copy paste from another code. To be updated.
 *******************************************************************************/
-#define MSP432P401R
-#ifdef MSP432P401R
-#define PCMCTL1                     (*((volatile uint32_t *)0x40010004))
-#define PCMCTL0                     (*((volatile uint32_t *)0x40010000))
-#define PCMIFG                      (*((volatile uint32_t *)0x4001000C))
-#define PCMCLRIFG                   (*((volatile uint32_t *)0x40010010))
-#define PJSEL0                      (*((volatile uint16_t *)0x40004D2A))
-#define PJSEL1                      (*((volatile uint16_t *)0x40004D2C))
-#define CSKEY                       (*((volatile uint32_t *)0x40010400))
-#define CSCTL1                      (*((volatile uint32_t *)0x40010408))
-#define CSCTL2                      (*((volatile uint32_t *)0x4001040C))
-#define FLCTL_BANK0_RDCTL           (*((volatile uint32_t *)0x40011010))
-#define FLCTL_BANK1_RDCTL           (*((volatile uint32_t *)0x40011014))
-#define CSIFG                       (*((volatile uint32_t *)0x40010448))
-#define CSCLRIFG                    (*((volatile uint32_t *)0x40010450))
-#define FLCTL_BANK0_RDCTL_WAIT_2    ((uint32_t)0x00002000)
-#define FLCTL_BANK1_RDCTL_WAIT_2    ((uint32_t)0x00002000)
-#endif
-
 uint32_t SYSTICK_Prewait = 0;                   // loops between BSP_Clock_InitFastest() called and PCM idle (expect 0)
 uint32_t SYSTICK_CPMwait = 0;                   // loops between Power Active Mode Request and Current Power Mode matching requested mode (expect small)
 uint32_t SYSTICK_Postwait = 0;                  // loops between Current Power Mode matching requested mode and PCM module idle (expect about 0)

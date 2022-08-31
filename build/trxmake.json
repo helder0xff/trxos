@@ -1,5 +1,5 @@
 {
 	"name": "trxos",
-	"modules" : ["/mnt/workspace/TRX/trxos/lib/CortexM"],
-	"defines" : [ ]
+	"modules" : ["/mnt/workspace/TRX/trxos/lib/CortexM", "/mnt/workspace/TRX/trxos/lib/board_support"],
+	"defines" : ["MSP432"]
 }
