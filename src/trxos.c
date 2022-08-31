@@ -12,6 +12,11 @@
 #include <systick.h>
 #include <CortexM.h>
 
+#ifdef MSP432
+#include <msp432p401r_b.h>
+#include <msp432p401r_c.h>
+#endif
+
 /* typedefs go here.	*/
 
 /* Consts go here.	*/
