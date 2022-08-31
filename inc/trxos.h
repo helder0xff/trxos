@@ -36,6 +36,8 @@ struct TCB{
     /** Pointer to the semaphore whose is blocking the thread, NULL in case
      * of no one is blocking it. */
     SEMAPHORE_semaphore_t* blocked;
+    /** Sleep counter in case of dormant thread. */    
+    uint32_t sleep_counter;
 };
 
 /**
@@ -110,6 +112,28 @@ void TRXOS_block(TCB_T* p_tcb, SEMAPHORE_semaphore_t* p_semaphore);
  * @return void
  */ 
 void TRXOS_unblock(SEMAPHORE_semaphore_t* p_semaphore);
+
+/**
+ * @brief Decrement the sleep counter for all the threads in the asleep list.
+ * 
+ * This function goes though all the threads in the sleep list decrementing
+ * its sleep counter. If the counter reach 0, the thread is moved back to 
+ * the main thread llist.
+ * 
+ * @return void
+ */ 
+void TRXOS_decrement_asleep_threads_counter(void);
+
+/**
+ * @brief Send current thread to sleep.
+ * 
+ * This function initialize the sleep counter, notify the shceduller that 
+ * the curent running thread is due to set to sleep and suspend.
+ * 
+ * @param time_uS Time for sleeping in uS.
+ * @return void
+ */ 
+void TRXOS_sleep(uint32_t time_uS);
 
 #endif /* TRXOS_H */
 

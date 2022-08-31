@@ -10,6 +10,7 @@
 #include <stdbool.h>
 #include <trxos.h>
 #include <systick.h>
+#include <sleep_timer.h>
 #include <CortexM.h>
 
 #ifdef MSP432
@@ -22,10 +23,11 @@
 /* Consts go here.	*/
 
 /* #defines go here.	*/
-#define TRXOS_NUMBER_OF_THREADS   10
-#define TRXOS_STACK_SIZE          100
-#define TRXOS_PERIOD_uS           10000 /* Period in uS at wich we trigger the
-                                    * scheduller. */
+#define TRXOS_NUMBER_OF_THREADS     10
+#define TRXOS_STACK_SIZE            100
+#define TRXOS_PERIOD_uS             10000 /* Period in uS at wich we trigger the
+                                           * scheduller. */
+#define TRXOS_SLEEP_TIMER_PERIOD_uS 1000
 
 /* static vars go here.	*/
 /** Linked List for the main threads. */
@@ -49,6 +51,13 @@ LL_list_t g_blocked_thread_list     = { NULL,   /* head     */
                                         0,      /* length   */
                                         0};     /* id_cnt   */
 
+/** Linked list for the blocked threads. */
+LL_list_t g_asleep_thread_list      = { NULL,   /* head     */
+                                        NULL,   /* current  */
+                                        NULL,   /* tail     */
+                                        0,      /* length   */
+                                        0};     /* id_cnt   */
+
 /** Local variable holding the TCBs of the threads. */                                        
 TCB_T _tcbs[TRXOS_NUMBER_OF_THREADS];
 
@@ -64,8 +73,9 @@ TCB_T *_runPt;
  *  being interrupted by SW (OS_suspend).
  *  This trick will keep the timing right.
  */
-static uint8_t _suspend_flag   = false;
-static uint8_t _blocked_flag   = false;
+static uint8_t _suspend_flag    = false;
+static uint8_t _blocked_flag    = false;
+static uint8_t _sleep_flag      = false;
 
 /** System clock. */
 uint32_t g_system_clk_Hz = 3000000;
@@ -142,7 +152,9 @@ void TRXOS_start_OS(void);
 
 void TRXOS_start(void) {
     LL_init(&g_blocked_thread_list, NULL);
+    LL_init(&g_asleep_thread_list, NULL);
     TRXOS_add_main_thread(&_main_dummy_thread, 0);
+    SLEEP_TIMER_init(TRXOS_SLEEP_TIMER_PERIOD_uS);
     _set_fastest_clk();
     SYSTICK_init(TRXOS_PERIOD_uS);
     TRXOS_start_OS();
@@ -175,6 +187,12 @@ void TRXOS_Scheduler(void){
             node = node->next;
             thread = (TCB_T*)node;
         }
+    if(true == _sleep_flag){
+        LL_move_node_to_another_list(
+            &g_main_thread_list,
+            &g_asleep_thread_list,
+            _runPt->node.id);
+        _sleep_flag = false;
     }
     if(false == _suspend_flag){
         _run_periodic_threads();
@@ -335,6 +353,29 @@ void TRXOS_unblock(SEMAPHORE_semaphore_t* p_semaphore){
         node    = node->next;
         thread  = (TCB_T*)node;
     }
+}
+
+void TRXOS_decrement_asleep_threads_counter(void){
+    int32_t length = LL_get_length(&g_asleep_thread_list);
+
+    if(0 < length){
+        TCB_T* thread = (TCB_T*)LL_get_head(&g_asleep_thread_list);
+        for(int i = 0; i < length; i++){
+            if(0 == --thread->sleep_counter){
+                LL_move_node_to_another_list(
+                    &g_asleep_thread_list,
+                    &g_main_thread_list,
+                    thread->node.id);
+            }
+            thread = (TCB_T*)thread->node.next;
+        }
+    } 
+}
+
+void TRXOS_sleep(uint32_t time_uS){
+    _runPt->sleep_counter = (int32_t)(time_uS / TRXOS_SLEEP_TIMER_PERIOD_uS);
+    _sleep_flag = true;
+    TRXOS_suspend();
 }
 
 /*******************************************************************************
