@@ -11,8 +11,10 @@ TODO
 	* 	There is main with LL unitary test ready to be integrated in a well 
 		designed test system at the root of this folder.
 #6 Review mail module.
-#7 Use the _sleep_flag, _blocked_flag & _suspend_flag as threads ids, instead
+#7 Use the _sleep_flag & _blocked_flag as threads ids, instead
 booleans. Might make the system more efficient.	
+#8 Use a semaphore instead the _supend_flag.
+#9 Move the run faster outside of the OS.
 
 DONE
 #1 LL: initialize linked list with no head.
