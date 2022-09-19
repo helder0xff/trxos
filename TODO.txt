@@ -1,20 +1,22 @@
 TODO
 !! Empty
 
-#2 Standarize naming.
+#2 	Standarize naming.
+#4 	Make the code HW agnostic with #defines.
+#5 	Implement tests.
+	* 	There is main with LL unitary test ready to be integrated in a well 
+		designed test system at the root of this folder.
+#6 	Review mail module.
+#7 	Use the _sleep_flag & _blocked_flag as threads ids, instead
+	booleans. Might make the system more efficient.	
+#8 	Use a semaphore instead the _supend_flag.
+#9 	Move the run faster outside of the OS.
+#10 Get rid of the use of g_system_clk_Hz & g_subsystem_clk_Hz as globals, pass
+	them as values (for the systick initialization for insance) 
+
+DONE
+#1 LL: initialize linked list with no head.
 #3 _set_fastest_clk:
 	Make this function more like a run time configuration of the OS so we
 	can choose between fast and accurate or slow (low energy) and no so 
 	accurate.
-#4 Make the code HW agnostic with #defines.
-#5 Implement tests.
-	* 	There is main with LL unitary test ready to be integrated in a well 
-		designed test system at the root of this folder.
-#6 Review mail module.
-#7 Use the _sleep_flag & _blocked_flag as threads ids, instead
-booleans. Might make the system more efficient.	
-#8 Use a semaphore instead the _supend_flag.
-#9 Move the run faster outside of the OS.
-
-DONE
-#1 LL: initialize linked list with no head.
