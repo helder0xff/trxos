@@ -135,6 +135,21 @@ void TRXOS_decrement_asleep_threads_counter(void);
  */ 
 void TRXOS_sleep(uint32_t time_uS);
 
+/**
+ * @brief Request a clk speed change at run time.
+ * 
+ * This function request a change on the system clock and manage all the
+ * peripherals depending on the frequency for its configuration (sleep_timer, 
+ * and systick for instance.)
+ * 
+ * The configured frequency is board dependant. The lowest the clk_speed_level
+ * the lowest the frequency to be set.
+ * 
+ * @param clk_speed_level The speed level, from 0 to 255.
+ * @return void
+ */ 
+void TRX_request_clk_speed_level(uint8_t clk_speed_level);
+
 #endif /* TRXOS_H */
 
 /* end of file */
