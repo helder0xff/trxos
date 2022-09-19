@@ -5,10 +5,10 @@
 #include <sleep_timer.h>
 #include <msp432p401r_b.h>
 
-extern uint32_t g_system_clk_Hz;
+extern uint32_t g_subsystem_clk_Hz;
 
 void SLEEP_TIMER_init(uint32_t period_uS){
-    uint32_t reload = ((g_system_clk_Hz / 1000000) * period_uS) - 1;
+    uint32_t reload = ((g_subsystem_clk_Hz / 1000000) * period_uS) - 1;
 
     __asm("CPSIE  I");  /* Disable interrupts. */
     TA0CTL &= ~0x0030;  /* Disable timer.           */
